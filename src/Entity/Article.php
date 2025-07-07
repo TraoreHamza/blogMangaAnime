@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -153,24 +155,24 @@ class Article
         return $this->blocks;
     }
 
-    public function addBlock(Block $block): static
-    {
-        if (!$this->blocks->contains($block)) {
-            $this->blocks->add($block);
-            $block->addArticle($this);
-        }
+    // public function addBlock(Block $block): static
+    // {
+    //     if (!$this->blocks->contains($block)) {
+    //         $this->blocks->add($block);
+    //         $block->addArticle($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeBlock(Block $block): static
-    {
-        if ($this->blocks->removeElement($block)) {
-            $block->removeArticle($this);
-        }
+    // public function removeBlock(Block $block): static
+    // {
+    //     if ($this->blocks->removeElement($block)) {
+    //         $block->removeArticle($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getAuthor(): ?User
     {
