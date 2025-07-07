@@ -14,41 +14,17 @@ class Favori
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $userId = null;
-
-    #[ORM\Column]
-    private ?int $mangaAnimeId = null;
-
-    #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'favoris')]
+    private ?User $users = null;
+
+    #[ORM\ManyToOne(inversedBy: 'favoris')]
+    private ?MangaAnime $mangaAnimes = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(int $userId): static
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getMangaAnimeId(): ?int
-    {
-        return $this->mangaAnimeId;
-    }
-
-    public function setMangaAnimeId(int $mangaAnimeId): static
-    {
-        $this->mangaAnimeId = $mangaAnimeId;
-
-        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -59,6 +35,30 @@ class Favori
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    public function getMangaAnimes(): ?MangaAnime
+    {
+        return $this->mangaAnimes;
+    }
+
+    public function setMangaAnimes(?MangaAnime $mangaAnimes): static
+    {
+        $this->mangaAnimes = $mangaAnimes;
 
         return $this;
     }
