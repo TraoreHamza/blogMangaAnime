@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -55,6 +57,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $isBanned = null;
+
+    /**
+     * @var Collection<int, Recommendation>
+     */
+    #[ORM\OneToMany(targetEntity: Recommendation::class, mappedBy: 'recommendations')]
+    private Collection $recommendations;
+
+    /**
+     * @var Collection<int, Favori>
+     */
+    #[ORM\OneToMany(targetEntity: Favori::class, mappedBy: 'users')]
+    private Collection $favoris;
+
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'users')]
+    private Collection $reviews;
+
+    public function __construct()
+    {
+        $this->recommendations = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -229,6 +256,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsBanned(bool $isBanned): static
     {
         $this->isBanned = $isBanned;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recommendation>
+     */
+    public function getRecommendations(): Collection
+    {
+        return $this->recommendations;
+    }
+
+    public function addRecommendation(Recommendation $recommendation): static
+    {
+        if (!$this->recommendations->contains($recommendation)) {
+            $this->recommendations->add($recommendation);
+            $recommendation->setRecommendations($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecommendation(Recommendation $recommendation): static
+    {
+        if ($this->recommendations->removeElement($recommendation)) {
+            // set the owning side to null (unless already changed)
+            if ($recommendation->getRecommendations() === $this) {
+                $recommendation->setRecommendations(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favori>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Favori $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+            $favori->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Favori $favori): static
+    {
+        if ($this->favoris->removeElement($favori)) {
+            // set the owning side to null (unless already changed)
+            if ($favori->getUsers() === $this) {
+                $favori->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getUsers() === $this) {
+                $review->setUsers(null);
+            }
+        }
 
         return $this;
     }
