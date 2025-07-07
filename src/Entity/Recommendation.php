@@ -14,41 +14,17 @@ class Recommendation
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $userId = null;
-
-    #[ORM\Column]
-    private ?int $mangaAnimeId = null;
-
-    #[ORM\Column]
     private ?int $score = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recommendations')]
+    private ?User $recommendations = null;
+
+    #[ORM\ManyToOne(inversedBy: 'recommendations')]
+    private ?MangaAnime $mangaAnimes = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(int $userId): static
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getMangaAnimeId(): ?int
-    {
-        return $this->mangaAnimeId;
-    }
-
-    public function setMangaAnimeId(int $mangaAnimeId): static
-    {
-        $this->mangaAnimeId = $mangaAnimeId;
-
-        return $this;
     }
 
     public function getScore(): ?int
@@ -59,6 +35,30 @@ class Recommendation
     public function setScore(int $score): static
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getRecommendations(): ?User
+    {
+        return $this->recommendations;
+    }
+
+    public function setRecommendations(?User $recommendations): static
+    {
+        $this->recommendations = $recommendations;
+
+        return $this;
+    }
+
+    public function getMangaAnimes(): ?MangaAnime
+    {
+        return $this->mangaAnimes;
+    }
+
+    public function setMangaAnimes(?MangaAnime $mangaAnimes): static
+    {
+        $this->mangaAnimes = $mangaAnimes;
 
         return $this;
     }
