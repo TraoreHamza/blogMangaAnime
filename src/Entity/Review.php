@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReviewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,23 @@ class Review
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    private ?User $users = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    private ?MangaAnime $mangaAnimes = null;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'reviews')]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -75,6 +94,60 @@ class Review
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUsers(): ?User
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    public function getMangaAnimes(): ?MangaAnime
+    {
+        return $this->mangaAnimes;
+    }
+
+    public function setMangaAnimes(?MangaAnime $mangaAnimes): static
+    {
+        $this->mangaAnimes = $mangaAnimes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setReviews($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getReviews() === $this) {
+                $comment->setReviews(null);
+            }
+        }
 
         return $this;
     }
