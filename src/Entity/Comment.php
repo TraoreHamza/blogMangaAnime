@@ -34,6 +34,9 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Article $article = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Review $reviews = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +110,18 @@ class Comment
     public function setArticle(?Article $article): static
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getReviews(): ?Review
+    {
+        return $this->reviews;
+    }
+
+    public function setReviews(?Review $reviews): static
+    {
+        $this->reviews = $reviews;
 
         return $this;
     }
