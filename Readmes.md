@@ -1,3 +1,4 @@
+
 # BLOG MANGAS/ANIMES
 
 ## PRESENTATION
@@ -58,7 +59,7 @@ classDiagram
         +int warningCount NN
         +string bio
         +string role
-         +DateTime createdAt NN
+        +DateTime createdAt NN
         +DateTime updatedAt NN
         +bool isActive NN
         +bool isBanned NN
@@ -80,10 +81,12 @@ classDiagram
 
     class Review {
         +int id
-        +string content
+        +text content
         +int rating NN
         +datetime createdAt NN
         +string status
+        +User users NN
+        +MangaAnime mangaAnimes NN
     }
 
     class Comment {
@@ -94,6 +97,7 @@ classDiagram
     +bool is_published NN
     +User author NN
     +Article article
+    +Review reviews NN
     }
 
     class MangaAnime {
@@ -117,24 +121,24 @@ classDiagram
 
     class Recommendation {
         +int id
-        +int userId NN
-        +int mangaAnimeId NN
         +int score NN
+        +MangaAnime mangaAnime NN
+        +User users NN
     }
 
     class Favori {
         +int id
-        +int userId NN
-        +int mangaAnimeId NN
         +datetime createdAt NN
+        +User users NN
+        +MangaAnime mangaAnimes NN
     }
 
     class Block {
     +int id
     +string name NN
     +string content 
-    +DateTime created_at 
-    +DateTime updated_at NN
+    +DateTime createdAt NN
+    +DateTime updatedAt NN
   }
 
     User "1" -- "0..*" Article : écrit
@@ -162,7 +166,7 @@ classDiagram
     -create()
     -edit()
     -delete()
-    -validate
+    -validate()
   }
 
   class CommentController {
