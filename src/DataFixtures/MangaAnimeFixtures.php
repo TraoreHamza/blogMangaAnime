@@ -2,14 +2,18 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\MangaAnime;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class MangaAnimeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
+        $MangaAnime = new MangaAnime();
+        $MangaAnime
+            ->setTitle('Attack on Titan')
+            ->setType('Anime');
         // $manager->persist($product);
 
         $manager->flush();
