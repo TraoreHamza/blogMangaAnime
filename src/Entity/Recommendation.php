@@ -17,7 +17,7 @@ class Recommendation
     private ?int $score = null;
 
     #[ORM\ManyToOne(inversedBy: 'recommendations')]
-    private ?User $recommendations = null;
+    private ?User $users = null;
 
     #[ORM\ManyToOne(inversedBy: 'recommendations')]
     private ?MangaAnime $mangaAnimes = null;
@@ -39,14 +39,14 @@ class Recommendation
         return $this;
     }
 
-    public function getRecommendations(): ?User
+    public function getUsers(): ?User
     {
-        return $this->recommendations;
+        return $this->users;
     }
 
-    public function setRecommendations(?User $recommendations): static
+    public function setUsers(?User $users): static
     {
-        $this->recommendations = $recommendations;
+        $this->users = $users;
 
         return $this;
     }
