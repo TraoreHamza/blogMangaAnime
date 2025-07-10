@@ -67,6 +67,9 @@ class MangaAnime
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'mangaAnimes')]
     private Collection $categories;
 
+    #[ORM\Column(length: 255)]
+    private ?string $coverImage = null;
+
     public function __construct()
     {
         $this->recommendations = new ArrayCollection();
@@ -301,6 +304,18 @@ class MangaAnime
         if ($this->categories->removeElement($category)) {
             $category->removeMangaAnime($this);
         }
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(string $coverImage): static
+    {
+        $this->coverImage = $coverImage;
 
         return $this;
     }
