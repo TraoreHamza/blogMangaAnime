@@ -6,12 +6,15 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['username'], message: 'This username is already in use.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -37,26 +40,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $avatar = null;
 
     #[ORM\Column]
-    private ?int $warningCount = null;
+    private ?int $warningCount = 0;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bio = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?bool $is_active = false;
 
     #[ORM\Column]
-    private ?bool $isActive = null;
-
-    #[ORM\Column]
-    private ?bool $isBanned = null;
+    private ?bool $is_banned = false;
 
     /**
      * @var Collection<int, Recommendation>
@@ -214,48 +217,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $createdAt;
 
         return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updatedAt;
+        return $this->updated_at;
     }
 
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated_at = $updatedAt;
 
         return $this;
     }
 
     public function isActive(): ?bool
     {
-        return $this->isActive;
+        return $this->is_active;
     }
 
     public function setIsActive(bool $isActive): static
     {
-        $this->isActive = $isActive;
+        $this->is_active = $isActive;
 
         return $this;
     }
 
     public function isBanned(): ?bool
     {
-        return $this->isBanned;
+        return $this->is_banned;
     }
 
     public function setIsBanned(bool $isBanned): static
     {
-        $this->isBanned = $isBanned;
+        $this->is_banned = $isBanned;
 
         return $this;
     }
@@ -272,7 +275,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->recommendations->contains($recommendation)) {
             $this->recommendations->add($recommendation);
-            $recommendation->setRecommendations($this);
+            $recommendation->setUsers($this);
         }
 
         return $this;
@@ -282,8 +285,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->recommendations->removeElement($recommendation)) {
             // set the owning side to null (unless already changed)
-            if ($recommendation->getRecommendations() === $this) {
-                $recommendation->setRecommendations(null);
+            if ($recommendation->getUsers() === $this) {
+                $recommendation->setUsers(null);
             }
         }
 
