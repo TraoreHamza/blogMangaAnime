@@ -1,3 +1,7 @@
+@import "tailwindcss";
+@reference "tailwindcss";
+
 body {
-    background-color: skyblue;
+  font-family: 'Questrial', sans-serif;
+  @apply text-lg text-slate-700 bg-zinc-50;
 }

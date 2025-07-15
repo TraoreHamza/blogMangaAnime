@@ -15,4 +15,22 @@ final class RecommendationController extends AbstractController
             'controller_name' => 'RecommendationController',
         ]);
     }
+
+    #[Route('/recommendation/generate', name: 'recommendation_generate', methods: ['POST'])]
+    public function generate(): Response
+    { /* ... */
+        return new Response('Recommendation generated successfully.');
+    }
+
+    #[Route('/recommendations/user/{userId}', name: 'recommendation_get_all_by_user', methods: ['GET'])]
+    public function getAllByUser(int $userId): Response
+    { /* ... */
+        return new Response('Recommendations for user ID: ' . $userId);
+    }
+
+    #[Route('/recommendations/mangaanime/{mangaAnimeId}', name: 'recommendation_get_all_by_mangaanime', methods: ['GET'])]
+    public function getAllByMangaAnime(int $mangaAnimeId): Response
+    { /* ... */
+        return new Response('Recommendations for Manga/Anime ID: ' . $mangaAnimeId);
+    }
 }
