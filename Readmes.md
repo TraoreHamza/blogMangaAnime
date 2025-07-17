@@ -1,4 +1,3 @@
-
 # BLOG MANGAS/ANIMES
 
 ## PRESENTATION
@@ -13,36 +12,36 @@ Mon intérêt pour ce projet est avant tout né de ma passion pour la culture ma
 
 ## USER STORIES
 
-* En tant qu’admin, je souhaite pouvoir valider, modifier ou supprimer les articles et critiques publiés par les utilisateurs afin de garantir la qualité et la pertinence des contenus sur le blog.
-* En tant qu’admin, je souhaite pouvoir modérer, éditer ou supprimer les commentaires inappropriés afin de maintenir un espace de discussion respectueux et agréable pour tous.
-* En tant qu’admin, je souhaite pouvoir consulter la liste des membres inscrits, modifier leurs rôles ou désactiver des comptes afin de gérer efficacement la communauté et prévenir les abus.
-* En tant qu’admin, je souhaite pouvoir publier des actualités ou annonces importantes sur la page d’accueil afin de tenir la communauté informée des nouveautés ou événements à venir.
-* En tant qu’admin, je souhaite recevoir et traiter les signalements d’abus ou de contenus inappropriés afin de réagir rapidement et protéger la communauté.
-* En tant qu’admin, je souhaite pouvoir créer, modifier ou supprimer des catégories et des tags afin d’organiser efficacement les contenus et faciliter la navigation des utilisateurs.
-* En tant qu'utilisateur je souhaite m'inscrire afin d'acceder à l'application de blog d'édiée au mangas et à l'animé
-* En tant que nouvel utilisateur passionné de manga, je veux pouvoir consulter facilement les critiques et classements des derniers mangas et animes afin de découvrir de nouvelles œuvres à lire ou à regarder
-* En tant que membre inscrit, je veux pouvoir rédiger et publier des critiques sur les mangas et animes que j’ai vus afin de partager mon opinion avec la communauté.
-* En tant qu’utilisateur, je veux commenter les articles et critiques des autres membres afin d’échanger des avis et débattre sur mes séries préférées.
-* En tant qu’utilisateur régulier, je veux pouvoir ajouter des mangas et animes à une liste de suivi afin de ne pas oublier où j’en suis dans mes lectures ou visionnages.
-* En tant qu’utilisateur, je veux recevoir des recommandations personnalisées basées sur mes goûts et mes évaluations afin de découvrir des titres qui pourraient me plaire.
-* En tant qu’utilisateur, je veux pouvoir filtrer les mangas et animes par genre, popularité ou date de sortie afin de trouver rapidement ce qui m’intéresse.
-* En tant que membre, je veux pouvoir personnaliser mon profil avec un avatar et une biographie afin de mieux me présenter à la communauté.
-* En tant qu’utilisateur, je veux être notifié lorsqu’un nouvel article ou une nouvelle critique est publiée sur une série que je suis afin de rester informé des dernières actualités.
+-   En tant qu’admin, je souhaite pouvoir valider, modifier ou supprimer les articles et critiques publiés par les utilisateurs afin de garantir la qualité et la pertinence des contenus sur le blog.
+-   En tant qu’admin, je souhaite pouvoir modérer, éditer ou supprimer les commentaires inappropriés afin de maintenir un espace de discussion respectueux et agréable pour tous.
+-   En tant qu’admin, je souhaite pouvoir consulter la liste des membres inscrits, modifier leurs rôles ou désactiver des comptes afin de gérer efficacement la communauté et prévenir les abus.
+-   En tant qu’admin, je souhaite pouvoir publier des actualités ou annonces importantes sur la page d’accueil afin de tenir la communauté informée des nouveautés ou événements à venir.
+-   En tant qu’admin, je souhaite recevoir et traiter les signalements d’abus ou de contenus inappropriés afin de réagir rapidement et protéger la communauté.
+-   En tant qu’admin, je souhaite pouvoir créer, modifier ou supprimer des catégories et des tags afin d’organiser efficacement les contenus et faciliter la navigation des utilisateurs.
+-   En tant qu'utilisateur je souhaite m'inscrire afin d'acceder à l'application de blog d'édiée au mangas et à l'animé
+-   En tant que nouvel utilisateur passionné de manga, je veux pouvoir consulter facilement les critiques et classements des derniers mangas et animes afin de découvrir de nouvelles œuvres à lire ou à regarder
+-   En tant que membre inscrit, je veux pouvoir rédiger et publier des critiques sur les mangas et animes que j’ai vus afin de partager mon opinion avec la communauté.
+-   En tant qu’utilisateur, je veux commenter les articles et critiques des autres membres afin d’échanger des avis et débattre sur mes séries préférées.
+-   En tant qu’utilisateur régulier, je veux pouvoir ajouter des mangas et animes à une liste de suivi afin de ne pas oublier où j’en suis dans mes lectures ou visionnages.
+-   En tant qu’utilisateur, je veux recevoir des recommandations personnalisées basées sur mes goûts et mes évaluations afin de découvrir des titres qui pourraient me plaire.
+-   En tant qu’utilisateur, je veux pouvoir filtrer les mangas et animes par genre, popularité ou date de sortie afin de trouver rapidement ce qui m’intéresse.
+-   En tant que membre, je veux pouvoir personnaliser mon profil avec un avatar et une biographie afin de mieux me présenter à la communauté.
+-   En tant qu’utilisateur, je veux être notifié lorsqu’un nouvel article ou une nouvelle critique est publiée sur une série que je suis afin de rester informé des dernières actualités.
 
 ## Liste priorisée de user stories
 
-| Priorité | Rôle                 | Action                                                                 | Bénéfice                                                             |
-| :-------: | --------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-|     1     | Visiteur              | Consulter la liste des articles                                        | Découvrir rapidement le contenu disponible                            |
-|     2     | Visiteur              | Lire un article détaillé                                             | Approfondir un sujet d’intérêt                                      |
-|     3     | Utilisateur           | S’inscrire / se connecter                                             | Participer (commentaires) et accéder aux fonctionnalités protégées |
-|     4     | Utilisateur connecté | Poster un commentaire                                                  | Partager son avis et échanger                                         |
-|     5     | Utilisateur connecté | Éditer ou supprimer son propre commentaire                            | Gérer et corriger son contenu                                         |
-|     6     | Administrateur        | Créer / supprimer un article via EasyAdmin                            | Gérer le contenu du blog de manière structurée                      |
-|     7     | Administrateur        | Gérer (activer/désactiver) et modérer les commentaires              | Maintenir un espace de discussion respectueux des CGU                  |
-|     8     | Administrateur        | Gérer les utilisateurs (rôles, blocage)                              | Contrôler l’accès et la sécurité du site                          |
-|     9     | Administrateur        | Configurer les blocs dynamiques du front (header, footer, sidebar)     | Personnaliser la mise en page sans recoder                             |
-|    10    | Administrateur        | Consulter des statistiques basiques (nombre d’articles, commentaires) | Suivre l’activité du site                                            |
+| Priorité | Rôle                 | Action                                                                | Bénéfice                                                           |
+| :------: | -------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------ |
+|    1     | Visiteur             | Consulter la liste des articles                                       | Découvrir rapidement le contenu disponible                         |
+|    2     | Visiteur             | Lire un article détaillé                                              | Approfondir un sujet d’intérêt                                     |
+|    3     | Utilisateur          | S’inscrire / se connecter                                             | Participer (commentaires) et accéder aux fonctionnalités protégées |
+|    4     | Utilisateur connecté | Poster un commentaire                                                 | Partager son avis et échanger                                      |
+|    5     | Utilisateur connecté | Éditer ou supprimer son propre commentaire                            | Gérer et corriger son contenu                                      |
+|    6     | Administrateur       | Créer / supprimer un article via EasyAdmin                            | Gérer le contenu du blog de manière structurée                     |
+|    7     | Administrateur       | Gérer (activer/désactiver) et modérer les commentaires                | Maintenir un espace de discussion respectueux des CGU              |
+|    8     | Administrateur       | Gérer les utilisateurs (rôles, blocage)                               | Contrôler l’accès et la sécurité du site                           |
+|    9     | Administrateur       | Configurer les blocs dynamiques du front (header, footer, sidebar)    | Personnaliser la mise en page sans recoder                         |
+|    10    | Administrateur       | Consulter des statistiques basiques (nombre d’articles, commentaires) | Suivre l’activité du site                                          |
 
 ### Services
 
@@ -76,7 +75,7 @@ classDiagram
         +DateTime updatedAt NN
         +User author NN
         +Comment comments
-        
+
     }
 
     class Review {
@@ -112,6 +111,7 @@ classDiagram
         +string coverImage NN
         +int numberOfVolumes NN
         +int numberOfEpisodes NN
+        +string genre NN
     }
 
     class Category {
@@ -136,7 +136,7 @@ classDiagram
     class Block {
     +int id
     +string name NN
-    +string content 
+    +string content
     +DateTime createdAt NN
     +DateTime updatedAt NN
   }
@@ -289,7 +289,8 @@ sequenceDiagram
 ```
 
 ### Create article
-``` mermaid
+
+```mermaid
 sequenceDiagram
     participant U as Utilisateur
     participant AC as ArticleController
@@ -333,7 +334,8 @@ sequenceDiagram
 ```
 
 ### Moderation of comments
-``` mermaid
+
+```mermaid
 sequenceDiagram
     participant Admin as Modérateur
     participant MC as ModerationService
@@ -348,7 +350,9 @@ sequenceDiagram
     MC-->>Admin: Résultat modération
 
 ```
+
 ### Add favori
+
 ```mermaid
 sequenceDiagram
     participant U as Utilisateur
@@ -366,9 +370,9 @@ sequenceDiagram
     FC-->>U: Confirmation ajout favori
 ```
 
-### Teléversement d'un image 
+### Teléversement d'un image
 
-``` mermaid
+```mermaid
 sequenceDiagram
     participant U as Utilisateur
     participant AC as ArticleController
