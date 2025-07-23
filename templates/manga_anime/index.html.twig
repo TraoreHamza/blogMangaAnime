@@ -1,20 +1,143 @@
+{# templates/manga_anime/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MangaAnimeController!{% endblock %}
+{% block title %}Catalogue Manga/Anime{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .manga-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .manga-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .manga-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .manga-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .manga-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .manga-info {
+            padding: 0.5rem;
+            text-align: center;
+        }
+        
+        .manga-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .manga-type {
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/Hamza/blogMangaAnime/src/Controller/MangaAnimeController.php</code></li>
-        <li>Your template at <code>C:/Users/Hamza/blogMangaAnime/templates/manga_anime/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="container mx-auto px-4 py-8">
+        {# Section des plus populaires #}
+        <div class="manga-section">
+            <h2 class="section-title">Les plus populaires</h2>
+            <div class="manga-grid">
+                {% set populaires = mangaAnimes|sort((a, b) => b.popularity <=> a.popularity)|slice(0, 3) %}
+                {% for manga in populaires %}
+                    <div class="manga-card">
+                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <div class="manga-info">
+                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
+                            <p class="manga-type">{{ manga.type|capitalize }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {# Section des classiques #}
+        <div class="manga-section">
+            <h2 class="section-title">Les classiques</h2>
+            <div class="manga-grid">
+                {% set classiques = mangaAnimes|filter(m => m.releaseDate < date('2000-01-01'))|slice(0, 3) %}
+                {% for manga in classiques %}
+                    <div class="manga-card">
+                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <div class="manga-info">
+                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
+                            <p class="manga-type">{{ manga.type|capitalize }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {# Section des nouveautés #}
+        <div class="manga-section">
+            <h2 class="section-title">Nouveau</h2>
+            <div class="manga-grid">
+                {% set nouveaux = mangaAnimes|filter(m => m.releaseDate > date('2025-01-01'))|slice(0, 3) %}
+                {% for manga in nouveaux %}
+                    <div class="manga-card">
+                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <div class="manga-info">
+                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
+                            <p class="manga-type">{{ manga.type|capitalize }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        {# Section Monstre & Démon #}
+        <div class="manga-section">
+            <h2 class="section-title">Monstre & Démon</h2>
+            <div class="manga-grid">
+                {% set monstres = mangaAnimes|filter(m => 
+                    m.genre matches '/monstre/i' or 
+                    m.genre matches '/démon/i' or 
+                    m.genre matches '/demon/i' or
+                    m.genre matches '/horreur/i' or
+                    m.title matches '/demon/i'
+                )|slice(0, 3) %}
+                {% for manga in monstres %}
+                    <div class="manga-card">
+                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <div class="manga-info">
+                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
+                            <p class="manga-type">{{ manga.type|capitalize }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

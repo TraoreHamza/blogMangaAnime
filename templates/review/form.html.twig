@@ -1,0 +1,44 @@
+{{ form_start(form) }}
+
+<div class="mb-4">
+	{{ form_label(form.content, null, {'label_attr': {'class': 'block mb-1 font-semibold'}}) }}
+	{{ form_widget(form.content, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+	{{ form_errors(form.content) }}
+</div>
+
+<div class="mb-4">
+	<label class="block mb-1 font-medium">Note :</label>
+
+	<div id="rating-stars" class="flex space-x-2">
+		{% for i in 1..5 %}
+			<svg data-star="{{ i }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" class="w-8 h-8 text-gray-400 hover:text-yellow-400 cursor-pointer transition duration-150">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+			</svg>
+		{% endfor %}
+	</div>
+
+	{# Champ caché pour garder la note #}
+	{{ form_widget(form.rating, {
+        'attr': {
+           'class': 'hidden',
+           'id': 'rating-input'
+        }
+    }) }}
+
+	{{ form_errors(form.rating) }}
+</div>
+
+
+<div class="mb-4">
+	{{ form_label(form.status, null, {'label_attr': {'class': 'block mb-1 font-semibold'}}) }}
+	{{ form_widget(form.status, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+	{{ form_errors(form.status) }}
+</div>
+
+<div class="mt-6">
+	<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+		{{ button_label|default('Enregistrer') }}
+	</button>
+</div>
+
+{{ form_end(form) }}

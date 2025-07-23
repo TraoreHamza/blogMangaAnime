@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes favoris{% endblock %}
+{% block body %}
+    <h1>Mes favoris</h1>
+    <ul>
+        {% for manga in favorites %}
+            <li>
+                <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}" width="50">
+                {{ manga.title }} ({{ manga.type }})
+            </li>
+        {% else %}
+            <li>Aucun favori pour l'instant.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

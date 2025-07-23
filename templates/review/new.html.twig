@@ -1,0 +1,12 @@
+{# templates/review/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Review{% endblock %}
+
+{% block body %}
+    <div class="max-w-2xl mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-6">Ajouter une critique</h1>
+
+        {% include 'review/form.html.twig' with { 'form': form, 'button_label': 'Envoyer la critique' } %}
+    </div>
+{% endblock %}

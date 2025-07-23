@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}Otaku{% endblock %}
+			{% block title %}Otaku
+			{% endblock %}
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 		<link rel="icon" href="https://api.iconify.design/lucide:layers-3.svg" type="image/x-icon">
@@ -23,7 +24,27 @@
 		{% endblock %}
 	</head>
 	<body>
-	 <twig:home />
+		{# <twig:home /> #}
 		{% block body %}{% endblock %}
 	</body>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const stars = document.querySelectorAll('#rating-stars svg');
+const input = document.getElementById('rating-input');
+
+stars.forEach(star => {
+star.addEventListener('click', function () {
+const rating = this.dataset.star;
+input.value = rating;
+
+stars.forEach(s => {
+const sVal = s.getAttribute('data-star');
+s.classList.toggle('text-yellow-400', sVal <= rating);
+s.classList.toggle('text-gray-400', sVal > rating);
+});
+});
+});
+});
+</script>
+
 </html>
