@@ -33,18 +33,23 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $reviews[] = $this->getReference('REVIEW_' . $i, Review::class);
         }
-        for ($i = 0; $i < 10; $i++) {
-            $comment = new Comment();
-            $comment
-                ->setContent($faker->paragraph(3))
-                ->setCreatedAt(new \DateTimeImmutable())
-                ->setIsModerated($faker->boolean(80)) // 80% de chance que le commentaire soit modéré
-                ->setIsPublished($faker->boolean(90)) // 90% de chance que le commentaire soit publié
-                ->setAuthor($faker->randomElement($users)) // Associe un utilisateur aléatoire
-                ->setArticle($faker->randomElement($article)) // Associe un article aléatoire
-                ->setReviews($faker->randomElement($reviews)) // Associe une review aléatoire
-            ;
-            $manager->persist($comment);
+
+        // TODO: Rédiger la création des commentaires pour les articles
+
+        foreach ($article as $art) {
+            for ($i = 0; $i < 5; $i++) { // 5 commentaires par article
+                $comment = new Comment();
+                $comment
+                    ->setContent($faker->paragraph(3))
+                    ->setCreatedAt(new \DateTimeImmutable())
+                    ->setIsModerated($faker->boolean(80)) // 80% de chance que le commentaire soit modéré
+                    ->setIsPublished($faker->boolean(90)) // 90% de chance que le commentaire soit publié
+                    ->setAuthor($faker->randomElement($users)) // Associe un utilisateur aléatoire
+                    ->setArticle($art) // Associe l'article actuel
+                    ->setReviews($faker->randomElement($reviews)) // Associe une review aléatoire
+                ;
+                $manager->persist($comment);
+            }
         }
 
         $manager->flush();
