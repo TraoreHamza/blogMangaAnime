@@ -18,6 +18,7 @@ class MangaAnimeFixtures extends Fixture
                 'title' => 'One Piece',
                 'type' => 'manga',
                 'releaseDate' => new \DateTime('1997-07-22'),
+                'genre' => 'aventure, action, comedie, fantasique',
                 'popularity' => 100,
                 'synopsis' => 'Luffy et son équipage partent à la recherche du One Piece.',
                 'author' => 'Eiichiro Oda',
@@ -34,6 +35,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "L'humanité lutte pour survivre face aux Titans.",
                 'author' => 'Hajime Isayama',
                 'studio' => 'Wit Studio',
+                'genre' => 'action, drame, fantastique',
                 'coverImage' => 'aot.jpg',
                 'numberOfVolumes' => 34,
                 'numberOfEpisodes' => 87,
@@ -46,6 +48,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Tanjiro combat les démons pour sauver sa sœur.',
                 'author' => 'Koyoharu Gotouge',
                 'studio' => 'ufotable',
+                'genre' => 'action, aventure, drame',
                 'coverImage' => 'demonslayer.jpg',
                 'numberOfVolumes' => 23,
                 'numberOfEpisodes' => 55,
@@ -58,6 +61,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Naruto Uzumaki rêve de devenir Hokage.',
                 'author' => 'Masashi Kishimoto',
                 'studio' => 'Pierrot',
+                'genre' => 'action, aventure, comedie',
                 'coverImage' => 'naruto.jpg',
                 'numberOfVolumes' => 72,
                 'numberOfEpisodes' => 720,
@@ -70,6 +74,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Izuku Midoriya veut devenir un héros dans un monde où 80% de la population a un pouvoir.",
                 'author' => 'Kohei Horikoshi',
                 'studio' => 'Bones',
+                'genre' => 'action, comedie, super-héros',
                 'coverImage' => 'mha.jpg',
                 'numberOfVolumes' => 38,
                 'numberOfEpisodes' => 138,
@@ -82,6 +87,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Edward et Alphonse Elric cherchent la pierre philosophale.',
                 'author' => 'Hiromu Arakawa',
                 'studio' => 'Bones',
+                'genre' => 'action, aventure, drame, fantastique',
                 'coverImage' => 'fma.jpg',
                 'numberOfVolumes' => 27,
                 'numberOfEpisodes' => 64,
@@ -94,6 +100,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Light Yagami découvre un carnet qui tue.',
                 'author' => 'Tsugumi Ohba',
                 'studio' => 'Madhouse',
+                'genre' => 'mystère, thriller, surnaturel',
                 'coverImage' => 'deathnote.jpg',
                 'numberOfVolumes' => 12,
                 'numberOfEpisodes' => 37,
@@ -107,6 +114,7 @@ class MangaAnimeFixtures extends Fixture
                 'author' => 'Akira Toriyama',
                 'studio' => 'Toei Animation',
                 'coverImage' => 'dragonball.jpg',
+                'genre' => 'action, aventure, comédie',
                 'numberOfVolumes' => 42,
                 'numberOfEpisodes' => 153,
             ],
@@ -118,6 +126,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Ichigo Kurosaki devient Shinigami pour protéger les humains.',
                 'author' => 'Tite Kubo',
                 'studio' => 'Pierrot',
+                'genre' => 'action, aventure, surnaturel',
                 'coverImage' => 'bleach.jpg',
                 'numberOfVolumes' => 74,
                 'numberOfEpisodes' => 366,
@@ -130,6 +139,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Yuji Itadori combat des fléaux avec l'aide de Satoru Gojo.",
                 'author' => 'Gege Akutami',
                 'studio' => 'MAPPA',
+                'genre' => 'action, surnaturel, horreur',
                 'coverImage' => 'jujutsu.jpg',
                 'numberOfVolumes' => 25,
                 'numberOfEpisodes' => 47,
@@ -143,6 +153,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Loid, espion, forme une famille fictive avec Yor et Anya pour une mission secrète.",
                 'author' => 'Tatsuya Endo',
                 'studio' => 'Wit Studio & CloverWorks',
+                'genre' => 'action, comédie, espionnage',
                 'coverImage' => 'spyxfamily.jpg',
                 'numberOfVolumes' => 14,
                 'numberOfEpisodes' => 25,
@@ -155,6 +166,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Denji combat des démons avec une tronçonneuse dans un univers violent et décalé.",
                 'author' => 'Tatsuki Fujimoto',
                 'studio' => 'MAPPA',
+                'genre' => 'action, horreur, comédie',
                 'coverImage' => 'chainsawman.jpg',
                 'numberOfVolumes' => 11,
                 'numberOfEpisodes' => 24,
@@ -167,6 +179,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Une compétition pour devenir l’attaquant numéro un du Japon dans un manga de football intense.",
                 'author' => 'Muneyuki Kaneshiro',
                 'studio' => '8bit',
+                'genre' => 'sport, action, drame',
                 'coverImage' => 'bluelock.jpg',
                 'numberOfVolumes' => 20,
                 'numberOfEpisodes' => 24,
@@ -179,6 +192,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Un homme capable de se transformer en monstre géant lutte contre les kaijus au Japon.",
                 'author' => 'Naoya Matsumoto',
                 'studio' => 'Production I.G',
+                'genre' => 'action, comédie, science-fiction',
                 'coverImage' => 'kaijuno8.jpg',
                 'numberOfVolumes' => 12,
                 'numberOfEpisodes' => 24,
@@ -191,6 +205,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Un mélange d’occultisme, science-fiction et romance adolescente avec beaucoup d’action.",
                 'author' => 'Yukinobu Tatsu',
                 'studio' => 'Science SARU',
+                'genre' => 'action, comédie, fantastique',
                 'coverImage' => 'dandadan.jpg',
                 'numberOfVolumes' => 5,
                 'numberOfEpisodes' => 12,
@@ -215,6 +230,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Sung Jin-Woo, le chasseur le plus faible, devient le plus puissant dans un monde de monstres.",
                 'author' => 'Chugong',
                 'studio' => 'A-1 Pictures',
+                'genre' => 'action, aventure, fantasy',
                 'coverImage' => 'sololeveling.jpg',
                 'numberOfVolumes' => 14,
                 'numberOfEpisodes' => 24,
@@ -227,6 +243,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Takemichi Hanagaki voyage dans le temps pour sauver son ex-petite amie et changer son destin.",
                 'author' => 'Ken Wakui',
                 'studio' => 'LIDENFILMS',
+                'genre' => 'action, drame, science-fiction',
                 'coverImage' => 'tokyorevengers.jpg',
                 'numberOfVolumes' => 30,
                 'numberOfEpisodes' => 24,
@@ -239,6 +256,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Thorfinn, fils d’un guerrier viking, cherche à venger la mort de son père.",
                 'author' => 'Makoto Yukimura',
                 'studio' => 'Wit Studio',
+                'genre' => 'action, aventure, drame',
                 'coverImage' => 'vinlandsaga.jpg',
                 'numberOfVolumes' => 12,
                 'numberOfEpisodes' => 24,
@@ -251,6 +269,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Shigeo Kageyama, un jeune garçon avec des pouvoirs psychiques, cherche à mener une vie normale.",
                 'author' => 'ONE',
                 'studio' => 'Bones',
+                'genre' => 'comédie, action, surnaturel',
                 'coverImage' => 'mobpsycho100.jpg',
                 'numberOfVolumes' => 16,
                 'numberOfEpisodes' => 36,
@@ -275,6 +294,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Guts, un mercenaire solitaire, lutte contre des forces démoniaques dans un monde médiéval sombre.',
                 'author' => 'Kentaro Miura',
                 'studio' => 'Madhouse',
+                'genre' => 'action, dark fantasy, drame',
                 'coverImage' => 'berserk.jpg',
                 'numberOfVolumes' => 41,
                 'numberOfEpisodes' => 25,
@@ -287,6 +307,7 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => 'Son Goku part à la recherche des Dragon Balls et devient un puissant guerrier.',
                 'author' => 'Akira Toriyama',
                 'studio' => 'Toei Animation',
+                'genre' => 'action, aventure, comédie',
                 'coverImage' => 'dragonball.jpg',
                 'numberOfVolumes' => 42,
                 'numberOfEpisodes' => 153,
@@ -299,10 +320,12 @@ class MangaAnimeFixtures extends Fixture
                 'synopsis' => "Gon Freecss part à la recherche de son père et devient Hunter.",
                 'author' => 'Yoshihiro Togashi',
                 'studio' => 'Madhouse',
+                'genre' => 'action, aventure, fantasy',
                 'coverImage' => 'hunterxhunter.jpg',
                 'numberOfVolumes' => 36,
                 'numberOfEpisodes' => 148,
             ],
+
         ];
 
         $i = 0; // Compteur pour les références
@@ -318,13 +341,14 @@ class MangaAnimeFixtures extends Fixture
                     ->setSynopsis($item['synopsis'])
                     ->setAuthor($item['author'])
                     ->setStudio($item['studio'])
+                    ->setGenre($item['genre'] ?? 'unknown') 
                     ->setCoverImage($item['coverImage'])
-                    ->setNumberOfVolumes($item['numberOfVolumes'])
+                    ->setnumberOfVolumes($item['numberOfVolumes'])
                     ->setNumberOfEpisodes($item['numberOfEpisodes'])
                 ;
                 $manager->persist($MangaAnime);
                 $this->addReference('MANGA_ANIME_' . $i, $MangaAnime);
-                $i++; 
+                $i++;
             }
         }
 
