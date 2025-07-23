@@ -299,14 +299,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Favori>
+     * @return Collection<int, Favoris>
      */
     public function getFavoris(): Collection
     {
         return $this->favoris;
     }
 
-    public function addFavori(Favori $favori): static
+    public function addFavoris(Favori $favori): static
     {
         if (!$this->favoris->contains($favori)) {
             $this->favoris->add($favori);
@@ -316,7 +316,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeFavori(Favori $favori): static
+    public function removeFavoris(Favori $favori): static
     {
         if ($this->favoris->removeElement($favori)) {
             // set the owning side to null (unless already changed)

@@ -37,6 +37,9 @@ class MangaAnime
     #[ORM\Column(length: 50)]
     private ?string $studio = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $genre = null;
+
     #[ORM\Column]
     private ?int $numberOfVolumes = null;
 
@@ -167,12 +170,24 @@ class MangaAnime
         return $this;
     }
 
-    public function getNumberOfVolumes(): ?int
+    public function getGenre(): ?string
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(string $genre): static
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getnumberOfVolumes(): ?int
     {
         return $this->numberOfVolumes;
     }
 
-    public function setNumberOfVolumes(int $numberOfVolumes): static
+    public function setnumberOfVolumes(int $numberOfVolumes): static
     {
         $this->numberOfVolumes = $numberOfVolumes;
 
