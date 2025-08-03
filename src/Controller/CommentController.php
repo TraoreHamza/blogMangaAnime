@@ -2,57 +2,87 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use App\Entity\Comment;
+use App\Service\ModerationService;
+use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CommentController extends AbstractController
 {
-    #[Route('/comment', name: 'app_comment')]
-    public function index(): Response
+    #[Route('/comment/new/{article}', name: 'comment_new', methods: ['POST'])]
+    public function new(
+            int $article, 
+            Request $request, // permet de gérer les requêtes HTTP (params, etc..)
+            ArticleRepository $ar,
+            EntityManagerInterface $em, // permet d'interagir avec la BDD
+            ModerationService $ms,
+            // ReviewRepository $reviewRepository
+    ): Response {
+        $articleComment = $ar->find($article); // Récupération de l'article
+        $user = $this->getUser(); // Récupération de l'utilisateur en cours
+        if(!$article) { // Ce sera ignorer si l'article existe
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
+        $comment = new Comment();
+        $comment
+            ->setAuthor($user)
+            ->setArticle($articleComment)
+            ->setContent($request->request->get('content'))
+        ;
+
+        $em->persist($comment); // Enregistrement de l'article (query SQL)
+        $em->flush($comment); // Exécution de l'enregistrement en BDD
+
+        $ms->checkComment($comment); // Appel de la méthode de modération
+
+        // dd($comment);
+
+        $this->addFlash('success', "Votre commentaire est en cours de traitement");
+        return $this->redirectToRoute('article', ['slug' => $articleComment->getSlug()]);
+    }
+
+    
+    /**  DELETE - Suppression d’un commentaire */
+    #[Route('/{id}/delete', name: 'comment_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function delete(Request $request, Comment $comment): Response
     {
-        return $this->render('comment/index.html.twig', [
-            'controller_name' => 'CommentController',
-        ]);
+        if (!$this->isCsrfTokenValid('delete_comment_' . $comment->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+            return $this->redirectToRoute('artcle', ['slug' => $comment->getArticle()->getSlug()]);
+        }
+
+        if ($comment->getAuthor() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous ne pouvez supprimer que vos commentaires.');
+            return $this->redirectToRoute('article', ['slug' => $comment->getArticle()->getSlug()]);
+        }
+
+        // $this->em->remove($comment);
+        // $this->em->flush();
+
+        $this->addFlash('success', 'Commentaire supprimé.');
+        return $this->redirect($request->headers->get('referer', '/'));
     }
 
-    #[Route('/comment', name: 'comment_create', methods: ['POST'])]
-    public function create(): Response
-    { /* ... */
-        return new Response('Comment created successfully.');
-    }
+    /**  REPORT - Signalement d’abus */
+    #[Route('/{id}/report', name: 'comment_report', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function report(Request $request, Comment $comment): Response
+    {
+        // Exemple simple : on ajoute un flag (peut être ajouté à l'entité)
+        $comment->setIsModerated(true); // Tu peux créer un champ `isReported` si besoin
 
-    #[Route('/comment/{id}', name: 'comment_edit', methods: ['PUT', 'PATCH'])]
-    public function edit(int $id): Response
-    { /* ... */
-        return new Response('Comment edited successfully.');
-    }
+        // $this->em->flush();
 
-    #[Route('/comment/{id}', name: 'comment_delete', methods: ['DELETE'])]
-    public function delete(int $id): Response
-    { /* ... */
-        return new Response('Comment deleted successfully.');
-    }
-
-    #[Route('/comments/article/{articleId}', name: 'comment_get_all_by_article', methods: ['GET'])]
-    public function getAllByArticle(int $articleId): Response
-    { /* ... */
-        return $this->render('comment/list.html.twig', [
-            'comments' => [], // Fetch and pass the list of comments for the article
-        ]);
-    }
-
-    #[Route('/comments/review/{reviewId}', name: 'comment_get_all_by_review', methods: ['GET'])]
-    public function getAllByReview(int $reviewId): Response
-    { /* ... */
-        return $this->render('comment/list.html.twig', [
-            'comments' => [], // Fetch and pass the list of comments for the review
-        ]);
-    }
-
-    #[Route('/comment/{id}/report', name: 'comment_report', methods: ['POST'])]
-    public function report(int $id): Response
-    { /* ... */
-        return new Response('Comment reported successfully.');
+        $this->addFlash('success', 'Commentaire signalé à un modérateur.');
+        return $this->redirect($request->headers->get('referer', '/'));
     }
 }
