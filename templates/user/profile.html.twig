@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<h1>Mon profil</h1>
+
+<p><strong>Nom :</strong> {{ user.username }}</p>
+<p><strong>Email :</strong> {{ user.email }}</p>
+
+<nav>
+    <ul>
+        <li><a href="{{ path('user_edit_profile') }}">Modifier mon profil</a></li>
+        <li><a href="{{ path('user_new_password') }}">Changer mon mot de passe</a></li>
+        <li><a href="{{ path('user_my_data') }}">Mes données personnelles</a></li>
+        <li><a href="{{ path('user_delete') }}">Supprimer mon compte</a></li>
+    </ul>
+</nav>
+{% endblock %}
