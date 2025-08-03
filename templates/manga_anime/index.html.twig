@@ -7,11 +7,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        body {
-            background-color: #000;
-            color: #fff;
-        }
-        
+     
         .manga-section {
             margin-bottom: 2rem;
         }
@@ -66,6 +62,7 @@
 
 {% block body %}
     <div class="container mx-auto px-4 py-8">
+    <a href="{{ path('mangaAnime_filter') }}" class="btn btn-primary">Filtrer</a>
         {# Section des plus populaires #}
         <div class="manga-section">
             <h2 class="section-title">Les plus populaires</h2>
@@ -73,7 +70,7 @@
                 {% set populaires = mangaAnimes|sort((a, b) => b.popularity <=> a.popularity)|slice(0, 3) %}
                 {% for manga in populaires %}
                     <div class="manga-card">
-                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
                         <div class="manga-info">
                             <h3 class="manga-title">{{ manga.title|upper }}</h3>
                             <p class="manga-type">{{ manga.type|capitalize }}</p>
@@ -90,7 +87,7 @@
                 {% set classiques = mangaAnimes|filter(m => m.releaseDate < date('2000-01-01'))|slice(0, 3) %}
                 {% for manga in classiques %}
                     <div class="manga-card">
-                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
                         <div class="manga-info">
                             <h3 class="manga-title">{{ manga.title|upper }}</h3>
                             <p class="manga-type">{{ manga.type|capitalize }}</p>
@@ -107,11 +104,14 @@
                 {% set nouveaux = mangaAnimes|filter(m => m.releaseDate > date('2025-01-01'))|slice(0, 3) %}
                 {% for manga in nouveaux %}
                     <div class="manga-card">
-                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
+                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
                         <div class="manga-info">
                             <h3 class="manga-title">{{ manga.title|upper }}</h3>
                             <p class="manga-type">{{ manga.type|capitalize }}</p>
                         </div>
+                        <a href="{{ path('mangaAnime_view', { id: manga.id }) }}">
+                            Voir Détails
+                        </a>
                     </div>
                 {% endfor %}
             </div>
