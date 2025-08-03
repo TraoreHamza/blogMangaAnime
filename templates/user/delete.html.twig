@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer mon compte{% endblock %}
+
+{% block body %}
+<h1>Supprimer mon compte</h1>
+
+<p>Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.</p>
+
+<form method="post" action="{{ path('user_delete') }}">
+    <button type="submit" class="btn btn-danger">Supprimer mon compte</button>
+    <a href="{{ path('user_profile') }}">Annuler</a>
+</form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes données personnelles{% endblock %}
+
+{% block body %}
+<h1>Mes données personnelles</h1>
+
+<p><strong>Nom :</strong> {{ user.name }}</p>
+<p><strong>Email :</strong> {{ user.email }}</p>
+<p><strong>Rôles :</strong> {{ user.roles|join(', ') }}</p>
+
+<a href="{{ path('user_profile') }}">Retour à mon profil</a>
+{% endblock %}
