@@ -71,6 +71,24 @@
             "./.php-cs-fixer.dist.php"
         ]
     },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.8.1"
+    },
+    "knplabs/knp-time-bundle": {
+        "version": "v2.4.0"
+    },
+    "php-http/discovery": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "./config/packages/http_discovery.yaml"
+        ]
+    },
     "phpunit/phpunit": {
         "version": "12.2",
         "recipe": {
@@ -328,6 +346,18 @@
         },
         "files": [
             "./assets/icons/symfony.svg"
+        ]
+    },
+    "symfony/ux-live-component": {
+        "version": "2.28",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.6",
+            "ref": "b7130b7b5ddc2f8994bd6149d7c093b184782f0c"
+        },
+        "files": [
+            "./config/routes/ux_live_component.yaml"
         ]
     },
     "symfony/ux-turbo": {

@@ -1,0 +1,53 @@
+{# templates/manga_anime/view.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Manga & Anime{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto bg-gray-900 text-gray-100 rounded-xl overflow-hidden shadow-2xl mb-12">
+
+    {# image + titre #}
+    <div class="relative text-center bg-gray-800 pb-5">
+        <img src="{{ asset('uploads/cover/' ~ mangaAnime.coverImage) }}"
+             alt="Couverture de {{ mangaAnime.title }}"
+             class="w-full max-h-72 object-cover border-b-4 border-blue-400 shadow-lg">
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight">
+            {{ mangaAnime.title }}
+            <span class="ml-2 text-lg text-gray-400 font-normal">({{ mangaAnime.releaseDate|date('Y') }})</span>
+        </h2>
+        <div class="text-blue-300 text-base mt-1">
+            {{ mangaAnime.type|capitalize }} de {{ mangaAnime.author }}
+        </div>
+    </div>
+
+    {# synopsis #}
+    <div class="px-8 py-6">
+        <h3 class="text-xl text-blue-400 font-semibold mb-2">Synopsis</h3>
+        <p class="mb-4 text-gray-200">{{ mangaAnime.synopsis }}</p>
+
+        {% if mangaAnime.genre %}
+            <div class="flex flex-wrap gap-2 mb-4">
+                {% for genre in mangaAnime.genre|split(',') %}
+                    <span class="bg-blue-900/90 text-blue-100 rounded-lg px-3 py-1 text-sm font-semibold">
+                        {{ genre|trim|capitalize }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# meta info #}
+    <div class="bg-gray-800/80 px-8 py-4 border-t border-blue-900/40 grid grid-cols-2 gap-x-5 gap-y-2 text-gray-300 text-base">
+        <div><span class="font-bold text-blue-300">Auteur :</span> {{ mangaAnime.author }}</div>
+        <div><span class="font-bold text-blue-300">Studio :</span> {{ mangaAnime.studio }}</div>
+        <div><span class="font-bold text-blue-300">Sortie :</span>
+            {# En français : remplace éventuellement ce format — nécessite twig/intl-extra pour les vrais mois en FR #}
+            {{ mangaAnime.releaseDate|date('d F Y') }}
+        </div>
+        <div><span class="font-bold text-blue-300">Popularité :</span> {{ mangaAnime.popularity }}/100</div>
+        <div><span class="font-bold text-blue-300">Volumes :</span> {{ mangaAnime.numberOfVolumes }}</div>
+        <div><span class="font-bold text-blue-300">Épisodes :</span> {{ mangaAnime.numberOfEpisodes }}</div>
+    </div>
+
+</div>
+{% endblock %}

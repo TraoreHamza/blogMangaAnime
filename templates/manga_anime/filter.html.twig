@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Filtrer les Manga/Animes{% endblock %}
+
+{% block body %}
+    <h1>Filtrer les Manga/Animes</h1>
+
+    <form method="get" action="{{ path('mangaAnime_filter') }}">
+        <div>
+            <label for="title">Nom :</label>
+            <input type="text" id="title" name="title" value="{{ filters.title ?? '' }}">
+        </div>
+        <div>
+            <label for="genre">Genre :</label>
+            <input type="text" id="genre" name="genre" value="{{ filters.genre ?? '' }}">
+        </div>
+        <div>
+            <label for="releaseDate">Année :</label>
+            <input type="number" id="releaseDate" name="releaseDate" value="{{ filters.releaseDate ?? '' }}">
+        </div>
+        <button type="submit">Filtrer</button>
+        <a href="{{ path('mangaAnime_filter') }}">Réinitialiser</a>
+    </form>
+
+    <h2>Résultats :</h2>
+    <ul>
+        {% for mangaAnime in mangaAnimes %}
+            <li>
+                <a href="{{ path('mangaAnime_view', {'id': mangaAnime.id}) }}">
+                    {{ mangaAnime.title }}{% if mangaAnime.releaseDate|date('Y-m-d') %} ({{ mangaAnime.releaseDate|date('Y-m-d') }}){% endif %}
+                </a>
+                <span> - Genre: {{ mangaAnime.genre }}</span>
+            </li>
+        {% else %}
+            <li>Aucun manga/anime trouvé.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

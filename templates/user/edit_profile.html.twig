@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+<h1>Modifier mon profil</h1>
+
+{{ form_start(profileForm) }}
+    {{ form_row(profileForm.username) }}
+    {{ form_row(profileForm.email) }}
+    <button class="btn btn-primary">{{ form_widget(profileForm.submit) }}</button>
+{{ form_end(profileForm) }}
+
+<a href="{{ path('user_profile') }}">Retour à mon profil</a>
+{% endblock %}

@@ -18,64 +18,39 @@ final class MangaAnimeController extends AbstractController
         private MangaAnimeRepository $mangaAnimeRepository,
     ){}
 
-    // Route pour touts les manaAnime
-    #[Route('s', name: 'mangaAnime', methods: ['GET'])]
+    // Route pour touts les mangaAnime
+    #[Route('s', name: 'mangaAnimes', methods: ['GET'])]
     public function index(): Response
     {
+        $mangaAnimes = $this->mangaAnimeRepository->findAll();
         return $this->render('manga_anime/index.html.twig', [
-            'controller_name' => 'MangaAnimeController',
+            'mangaAnimes' => $mangaAnimes,
         ]);
     }
 
-    #[Route('/new', name: 'mangaanime_new', methods: ['POST', 'GET'])]
-    public function new(Request $request): Response
-    { /* ... */
-        // Nouvelle Manga/Anime creation logic
-        $mangaAnime = new MangaAnime();
-        
-        
-        return new Response('Manga/Anime created successfully.');
-    }
-
-    #[Route('/mangaanime/{id}', name: 'mangaanime_edit', methods: ['PUT', 'PATCH'])]
-    public function edit(int $id): Response
-    { /* ... */
-        return new Response('Manga/Anime edited successfully.');
-    }
-
-    #[Route('/mangaanime/{id}', name: 'mangaanime_delete', methods: ['DELETE'])]
-    public function delete(int $id): Response
-    { /* ... */
-        return new Response('Manga/Anime deleted successfully.');
-    }
-
-    #[Route('/mangaanimes', name: 'mangaanime_get_all', methods: ['GET'])]
-    public function getAll(): Response
-    { /* ... */
-        return $this->render('manga_anime/list.html.twig', [
-            'manga_animes' => [], // Fetch and pass the list of Manga/Anime entities
+    // afficher les detail d'un mangaAnime
+    #[Route('/{id}', name: 'mangaAnime_view', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    public function view(int $id): Response
+    {
+        $mangaAnime = $this->mangaAnimeRepository->find($id);
+        if (!$mangaAnime) {
+            $this->addFlash('error', 'Manga/Anime not found.');
+            return $this->redirectToRoute('mangaAnimes');
+        }
+        return $this->render('manga_anime/view.html.twig', [
+            'mangaAnime' => $mangaAnime,
         ]);
     }
-
-    #[Route('/mangaanime/{id}', name: 'mangaanime_get_by_id', methods: ['GET'])]
-    public function getById(int $id): Response
-    { /* ... */
-        return $this->render('manga_anime/detail.html.twig', [
-            'manga_anime' => null, // Fetch and pass the Manga/Anime entity by ID
-        ]);
-    }
-
-    #[Route('/mangaanime/add-to-list', name: 'mangaanime_add_to_list', methods: ['POST'])]
-    public function addToList(): Response
-    { /* ... */
-        return new Response('Manga/Anime added to list successfully.');
-    }
-
-    #[Route('/mangaanime/filter', name: 'mangaanime_filter', methods: ['GET'])]
-    public function filter(): Response
-    { /* ... */
+    
+    // filtrer les mangaAnimes
+    #[Route('/filter', name: 'mangaAnime_filter', methods: ['GET'])]
+    public function filter(Request $request): Response
+    {
+        $filters = $request->query->all();
+        $mangaAnimes = $this->mangaAnimeRepository->findByFilters($filters);
         return $this->render('manga_anime/filter.html.twig', [
-            'filters' => [], // Fetch and pass available filters
+            'mangaAnimes' => $mangaAnimes,
+            'filters' => $filters,
         ]);
     }
 }

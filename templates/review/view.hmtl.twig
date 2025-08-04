@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Details de l'Avis
+{% endblock %}
+
+{% block body %}
+	<div class="max-w-2xl mx-auto mt-10">
+		<h1 class="text-xl font-bold">{{ review.mangaAnimes.title ?? 'Manga inconnu' }}</h1>
+		<p class="text-sm text-gray-600">Note :
+			{{ review.rating }}/5</p>
+		<p class="mt-4">{{ review.content }}</p>
+
+		<div class="mt-6 flex gap-4">
+			<a href="{{ path('review_edit', { id: review.id }) }}" class="text-blue-600 hover:underline">Modifier</a>
+			<form action="{{ path('review_delete', { id: review.id }) }}" method="post" onsubmit="return confirm('Confirmer la suppression ?');">
+				<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">
+				<button class="text-red-600 hover:underline">Supprimer</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
