@@ -1,27 +1,40 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{% endblock %} • Otaku</title>
-        <link rel="icon" href="https://api.iconify.design/lucide:layers-3.svg" type="image/x-icon">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Questrial&display=swap" rel="stylesheet">
-        {% block stylesheets %}
-            <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}{% endblock %}
+			• Otaku</title>
+		<link rel="icon" href="https://api.iconify.design/lucide:layers-3.svg" type="image/x-icon">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Questrial&display=swap" rel="stylesheet">
+		{% block stylesheets %}
+			<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
+			<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-            <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-        {% endblock %}
-    </head>
-    <body >
-        <twig:nav />
-        <main id="swup" class="container mx-auto px-4">
-            {% block body %}{% endblock %}
-        </main>
-        <twig:footer />
-    </body>
-</html>
+		{% endblock %}
+
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+			<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+			<script src="{{ asset('/assets/app.js') }}"></script>
+		{% endblock %}
+	</head>
+	<body>
+		<style>
+		 body {
+			background-color: black; /* Couleur de fond sombre */
+			color: #ffff; /* Couleur de texte claire */
+		 }
+		</style>
+
+		<twig:nav/>
+		<main id="swup" class="container mx-auto px-4"> {% block body %}{% endblock %}
+			</main>
+			<twig:footer/>
+		</body>
+	</html>
