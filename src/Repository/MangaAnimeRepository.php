@@ -61,4 +61,24 @@ class MangaAnimeRepository extends ServiceEntityRepository
         }
         return $qb->getQuery()->getResult();
     }
+
+    // src/Repository/MangaAnimeRepository.php
+    public function findByGenres(array $genres, int $limit = 5): array
+    {
+        $qb = $this->createQueryBuilder('m');
+        $orX = $qb->expr()->orX();
+
+        foreach ($genres as $i => $genre) {
+            // Suppose que "genre" est une chaîne (exemple : "action, aventure")
+            $orX->add($qb->expr()->like('LOWER(m.genre)', ':genre' . $i));
+            $qb->setParameter('genre' . $i, '%' . strtolower($genre) . '%');
+        }
+
+        return $qb
+            ->andWhere($orX)
+            ->orderBy('m.popularity', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
