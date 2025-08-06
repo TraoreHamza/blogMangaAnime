@@ -43,7 +43,7 @@ class ReviewController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $review->setCreatedAt(new \DateTimeImmutable());
-            $review->setUsers($this->getUser());
+            $review->setUser($this->getUser());
 
             $mangaAnimeId = $request->request->get('manga_anime_id');
             $mangaAnime = $this->mangaAnimeRepository->find($mangaAnimeId);
@@ -68,10 +68,10 @@ class ReviewController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'review_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'review_view', methods: ['GET'])]
     public function show(Review $review): Response
     {
-        return $this->render('review/show.html.twig', [
+        return $this->render('review/view.html.twig', [
             'review' => $review,
         ]);
     }
@@ -80,9 +80,9 @@ class ReviewController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Review $review): Response
     {
-        if ($this->getUser() !== $review->getUsers() && !$this->isGranted('ROLE_ADMIN')) {
+        if ($this->getUser() !== $review->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('error', 'Accès refusé');
-            return $this->redirectToRoute('review_index');
+            return $this->redirectToRoute('review');
         }
 
         $form = $this->createForm(ReviewForm::class, $review);
@@ -93,7 +93,7 @@ class ReviewController extends AbstractController
 
             $this->addFlash('success', 'Review modifiée avec succès.');
 
-            return $this->redirectToRoute('review_show', ['id' => $review->getId()]);
+            return $this->redirectToRoute('review_view', ['id' => $review->getId()]);
         }
 
         return $this->render('review/edit.html.twig', [
@@ -107,7 +107,7 @@ class ReviewController extends AbstractController
     public function delete(Request $request, Review $review): Response
     {
         if ($this->isCsrfTokenValid('delete' . $review->getId(), $request->request->get('_token'))) {
-            if ($this->getUser() === $review->getUsers() || $this->isGranted('ROLE_ADMIN')) {
+            if ($this->getUser() === $review->getUser() || $this->isGranted('ROLE_ADMIN')) {
                 $this->em->remove($review);
                 $this->em->flush();
 
@@ -117,6 +117,6 @@ class ReviewController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('review_index');
+        return $this->redirectToRoute('review');
     }
 }

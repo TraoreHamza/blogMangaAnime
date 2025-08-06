@@ -4,23 +4,29 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\MangaAnime;
-use App\Repository\MangaAnimeRepository;
+use App\Entity\Recommendation;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\MangaAnimeRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\RecommendationRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class RecommendationController extends AbstractController
 {
+    private RecommendationRepository $recommendationRepository;
     private MangaAnimeRepository $mangaAnimeRepository;
     private UserRepository $userRepository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(MangaAnimeRepository $mangaAnimeRepository, UserRepository $userRepository)
+    public function __construct(MangaAnimeRepository $mangaAnimeRepository, RecommendationRepository $recommendationRepository, UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->mangaAnimeRepository = $mangaAnimeRepository;
         $this->userRepository = $userRepository;
+        $this->entityManager = $entityManager;
+        $this->recommendationRepository = $recommendationRepository;
     }
 
     #[Route('/recommendation', name: 'app_recommendation')]
@@ -29,27 +35,45 @@ final class RecommendationController extends AbstractController
         return $this->render('recommendation/index.html.twig');
     }
 
-    // Génération de recommandations personnalisées (POST)
     #[Route('/recommendations/generate', name: 'recommendation_generate', methods: ['POST'])]
     public function generate(Request $request): Response
     {
-        // Générer des recommandations pour l'utilisateur connecté
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        // // Logique personnalisée (ici genre préféré ou autres critères)
-        // $favGenres = $user->getFavoriteGenres() ?? []; 
-        // if (empty($favGenres)) {
-        //     $recommendations = $this->mangaAnimeRepository->findBy([], ['popularity' => 'DESC'], 5);
-        // } else {
-        //     $recommendations = $this->mangaAnimeRepository->findByGenres($favGenres, 5);
-        // }
+        // Récupérer les genres favoris de l'utilisateur
+        $favGenres = $user->getFavoris() ? $user->getFavoris()->toArray() : [];
+
+        if (empty($favGenres)) {
+            // Top 5 des mangas/animes les plus populaires
+            $recommendationsData = $this->mangaAnimeRepository->findBy([], ['popularity' => 'DESC'], 5);
+        } else {
+            // Recherche personnalisée selon genres favoris
+            $recommendationsData = $this->mangaAnimeRepository->findByGenres($favGenres, 5);
+        }
+
+        // Supprimer les recommandations existantes pour cet utilisateur 
+        $existingRecs = $this->recommendationRepository->findBy(['user' => $user]);
+        foreach ($existingRecs as $rec) {
+            $this->entityManager->remove($rec);
+        }
+        $this->entityManager->flush();
+
+        // Créer et persister les nouvelles recommandations
+        foreach ($recommendationsData as $mangaAnime) {
+            $recommendation = new Recommendation();
+            $recommendation->setUser($user);
+            $recommendation->setMangaAnime($mangaAnime);
+
+            $this->entityManager->persist($recommendation);
+        }
+        $this->entityManager->flush();
 
         return $this->render('recommendation/list.html.twig', [
-            // 'recommendations' => $recommendations,
+            'recommendations' => $recommendationsData,
             'user' => $user,
         ]);
     }
