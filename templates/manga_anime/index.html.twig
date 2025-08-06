@@ -2,142 +2,123 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalogue Manga/Anime{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-     
-        .manga-section {
-            margin-bottom: 2rem;
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid #333;
-        }
-        
-        .manga-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-        
-        .manga-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-        
-        .manga-card:hover {
-            transform: scale(1.05);
-        }
-        
-        .manga-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .manga-info {
-            padding: 0.5rem;
-            text-align: center;
-        }
-        
-        .manga-title {
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 0.25rem;
-        }
-        
-        .manga-type {
-            font-size: 0.8rem;
-            color: #888;
-        }
-    </style>
+{% block title %}Catalogue Manga/Anime
 {% endblock %}
 
 {% block body %}
-    <div class="container mx-auto px-4 py-8">
-    <a href="{{ path('mangaAnime_filter') }}" class="btn btn-primary">Filtrer</a>
-        {# Section des plus populaires #}
-        <div class="manga-section">
-            <h2 class="section-title">Les plus populaires</h2>
-            <div class="manga-grid">
-                {% set populaires = mangaAnimes|sort((a, b) => b.popularity <=> a.popularity)|slice(0, 3) %}
-                {% for manga in populaires %}
-                    <div class="manga-card">
-                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
-                        <div class="manga-info">
-                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
-                            <p class="manga-type">{{ manga.type|capitalize }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        {# Section des classiques #}
-        <div class="manga-section">
-            <h2 class="section-title">Les classiques</h2>
-            <div class="manga-grid">
-                {% set classiques = mangaAnimes|filter(m => m.releaseDate < date('2000-01-01'))|slice(0, 3) %}
-                {% for manga in classiques %}
-                    <div class="manga-card">
-                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
-                        <div class="manga-info">
-                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
-                            <p class="manga-type">{{ manga.type|capitalize }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        {# Section des nouveautés #}
-        <div class="manga-section">
-            <h2 class="section-title">Nouveau</h2>
-            <div class="manga-grid">
-                {% set nouveaux = mangaAnimes|filter(m => m.releaseDate > date('2025-01-01'))|slice(0, 3) %}
-                {% for manga in nouveaux %}
-                    <div class="manga-card">
-                        <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
-                        <div class="manga-info">
-                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
-                            <p class="manga-type">{{ manga.type|capitalize }}</p>
-                        </div>
-                        <a href="{{ path('mangaAnime_view', { id: manga.id }) }}">
-                            Voir Détails
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        {# Section Monstre & Démon #}
-        <div class="manga-section">
-            <h2 class="section-title">Monstre & Démon</h2>
-            <div class="manga-grid">
-                {% set monstres = mangaAnimes|filter(m => 
+	<style>
+		.scrollbar-hide::-webkit-scrollbar {
+			display: none;
+		}
+		.scrollbar-hide {
+			-ms-overflow-style: none; 
+			scrollbar-width: none; 
+		}
+	</style>
+	<div class="mb-8 relative">
+		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Les plus populaires</h2>
+		<button id="scroll-left" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<button id="scroll-right" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<div id="scroll-container" class="overflow-x-auto scrollbar-hide">
+			<div class="flex space-x-6">
+				{% set populaires = mangaAnimes|sort((a, b) => b.popularity <=> a.popularity) %}
+				{% for manga in populaires %}
+					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
+						<div class="p-4 text-center">
+							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{# Section des classiques #}
+	<div class="mb-8 relative">
+		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Les classiques</h2>
+		<button id="scroll-left-classic" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<button id="scroll-right-classic" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<div id="scroll-container-classic" class="overflow-x-auto scrollbar-hide">
+			<div class="flex space-x-6">
+				{% set classiques = mangaAnimes|filter(m => m.releaseDate < date('2000-01-01')) %}
+				{% for manga in classiques %}
+					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
+						<div class="p-4 text-center">
+							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	{# Section des nouveautés #}
+	<div class="mb-8 relative">
+		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Nouveau</h2>
+		<button id="scroll-left-new" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<button id="scroll-right-new" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<div id="scroll-container-new" class="overflow-x-auto scrollbar-hide">
+			<div class="flex space-x-6">
+				{% set nouveaux = mangaAnimes|filter(m => m.releaseDate > date('2025-01-01')) %}
+				{% for manga in nouveaux %}
+					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
+						<div class="p-4 text-center">
+							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						</div>
+						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="block mx-4 my-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 text-center transition">
+							Voir Détails
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	{# Section Monstre & Démon #}
+	<div class="mb-8 relative">
+		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Monstre & Démon</h2>
+		<button id="scroll-left-md" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<button id="scroll-right-md" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		</button>
+		<div id="scroll-container-md" class="overflow-x-auto scrollbar-hide">
+			<div class="flex space-x-6">
+				{% set monstres = mangaAnimes|filter(m =>
                     m.genre matches '/monstre/i' or 
                     m.genre matches '/démon/i' or 
                     m.genre matches '/demon/i' or
                     m.genre matches '/horreur/i' or
                     m.title matches '/demon/i'
-                )|slice(0, 3) %}
-                {% for manga in monstres %}
-                    <div class="manga-card">
-                        <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}">
-                        <div class="manga-info">
-                            <h3 class="manga-title">{{ manga.title|upper }}</h3>
-                            <p class="manga-type">{{ manga.type|capitalize }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+                ) %}
+				{% for manga in monstres %}
+					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
+						<img src="{{ asset('images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
+						<div class="p-4 text-center">
+							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
