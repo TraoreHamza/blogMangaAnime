@@ -1,35 +1,33 @@
 {# templates/recommendation/list.html.twig #}
-
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    Recommandations
+{% block title %}Recommandations
 {% endblock %}
 
 {% block body %}
-<h1>Recommandations pour {{ user.username ?? 'vous' }}</h1>
+	<div class="min-h-screen bg-gray-50 p-6">
+		<div class="max-w-7xl mx-auto">
+			<h1 class="text-4xl font-bold mb-8 text-center text-gray-900">
+				Recommandations pour
+				{{ user.username ?? 'vous' }}
+			</h1>
 
-{# Si un sujet manga/anime est passé (recommandations par similarité) #}
-{% if subject is defined %}
-    <h2>Recommandations similaires à "{{ subject.title ?? subject.name ?? 'l\'élément sélectionné' }}"</h2>
-{% endif %}
-
-{# Vérification qu'il y a des recommandations #}
-{% if recommendations is empty %}
-    <p>Aucune recommandation disponible pour le moment.</p>
-{% else %}
-    <ul class="recommendations-list">
-        {% for manga in recommendations %}
-            <li class="recommendation-item">
-                <h3>{{ manga.title ?? manga.name }}</h3>
-                {# Si tu as un champ image (ajuste selon ta structure d’entité) #}
-                {% if manga.image %}
-                    <img src="{{ asset('medias/images/' ~ manga.coverImage) }}" alt="{{ manga.title ?? manga.name }}" style="max-width: 200px;">
-                {% endif %}
-                <p>{{ manga.description|default('Pas de description disponible.')|slice(0, 150) }}...</p>
-                <a href="{{ path('manga_show', {'id': manga.id}) }}">Voir plus</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+			{% if recommendations is empty %}
+				<p class="text-center text-gray-600">Aucune recommandation disponible pour le moment.</p>
+			{% else %}
+				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+					{% for manga in recommendations %}
+						<div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col">
+							<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100 rounded mb-4"/>
+							<h2 class="text-xl font-semibold mb-2 text-gray-800">{{ manga.title }}</h2>
+							<p class="text-sm text-gray-500 mb-4">{{ manga.type|capitalize }}</p>
+							<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="mt-auto inline-block bg-cyan-600 text-white rounded px-4 py-2 text-center hover:bg-cyan-700 transition">
+								Voir détails
+							</a>
+						</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
 {% endblock %}
