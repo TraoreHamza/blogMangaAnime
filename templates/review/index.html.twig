@@ -12,7 +12,7 @@
 		</a>
 
 		{% for review in reviews %}
-			<div class="mb-6 p-4 bg-white border rounded shadow">
+			<div class="mb-6 p-4 bg-neutral-900 border rounded shadow">
 				<h2 class="text-lg font-semibold">
 					{{ review.mangaAnimes.title ?? 'Anime inconnu' }}
 				</h2>
@@ -20,12 +20,12 @@
 					Note :
 					<strong>{{ review.rating }}/5</strong>
 					<span class="ml-2">Par
-						{{ review.users.email }}</span>
+						{{ review.user.email }}</span>
 				</p>
 				<p class="mt-2">{{ review.content | e }}</p>
 				<div class="mt-3 flex space-x-2">
-					<a href="{{ path('review_show', { id: review.id }) }}" class="text-blue-500 hover:underline text-sm">Voir</a>
-					{% if app.user and (app.user == review.users or is_granted('ROLE_ADMIN')) %}
+					<a href="{{ path('review_view', { id: review.id }) }}" class="text-blue-500 hover:underline text-sm">Voir</a>
+					{% if app.user and (app.user == review.user or is_granted('ROLE_ADMIN')) %}
 						<a href="{{ path('review_edit', { id: review.id }) }}" class="text-green-500 hover:underline text-sm">Modifier</a>
 						<form method="post" action="{{ path('review_delete', { id: review.id }) }}" onsubmit="return confirm('Confirmer la suppression ?');" class="inline">
 							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">

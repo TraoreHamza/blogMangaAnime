@@ -19,11 +19,11 @@
 
 	{# Champ caché pour garder la note #}
 	{{ form_widget(form.rating, {
-        'attr': {
-           'class': 'hidden',
-           'id': 'rating-input'
-        }
-    }) }}
+        'attr': {
+		'class': 'hidden',
+		'id': 'rating-input'
+	}
+}) }}
 
 	{{ form_errors(form.rating) }}
 </div>
