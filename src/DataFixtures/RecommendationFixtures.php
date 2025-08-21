@@ -28,8 +28,8 @@ class RecommendationFixtures extends Fixture implements DependentFixtureInterfac
         $product = new Recommendation();
         $product
             ->setScore($faker->numberBetween(1, 10))
-            ->setUsers($faker->randomElement($users)) // Associe un utilisateur aléatoire
-            ->setMangaAnimes($faker->randomElement($mangaAnime)) // Associe une mangaAnime aléatoire
+            ->setUser($faker->randomElement($users)) // Associe un utilisateur aléatoire
+            ->setMangaAnime($faker->randomElement($mangaAnime)) // Associe une mangaAnime aléatoire
         ;
         $manager->persist($product);
         }
