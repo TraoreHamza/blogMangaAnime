@@ -1,15 +1,34 @@
 {% extends 'base.html.twig' %}
-{% block title %}Mes favoris{% endblock %}
+
+{% block title %}Mes Favoris
+{% endblock %}
+
 {% block body %}
-    <h1>Mes favoris</h1>
-    <ul>
-        {% for manga in favorites %}
-            <li>
-                <img src="{{ asset('images/' ~ manga.coverImage) }}" alt="{{ manga.title }}" width="50">
-                {{ manga.title }} ({{ manga.type }})
-            </li>
-        {% else %}
-            <li>Aucun favori pour l'instant.</li>
-        {% endfor %}
-    </ul>
+	<div class="container mx-auto mt-8">
+		<h1 class="text-2xl font-bold mb-6">Mes Favoris</h1>
+
+		{% if favorites is empty %}
+			<div class="text-gray-400">Aucun favori pour l’instant.</div>
+		{% else %}
+			<div class="flex flex-wrap gap-6">
+				{% for fav in favorites %}
+					<div class="bg-black rounded-lg shadow-md overflow-hidden w-64 transform hover:scale-105 transition">
+						<img src="{{ asset('medias/images/' ~ fav.mangaAnimes.image) }}" alt="{{ fav.mangaAnimes.title }}" class="w-full h-64 object-contain bg-gray-100">
+						<div class="p-4 text-center">
+							<h3 class="text-lg font-semibold mb-1">{{ fav.mangaAnimes.title|upper }}</h3>
+							<p class="text-gray-500 text-sm mb-1">{{ fav.mangaAnimes.type|capitalize }}</p>
+							<p class="text-gray-500 text-xs italic mb-2">{{ fav.mangaAnimes.genre|capitalize }}</p>
+						</div>
+						<a href="{{ path('mangaAnime_view', { id: fav.mangaAnimes.id }) }}" class="block mx-4 mb-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 text-center transition">Voir Détails</a>
+						<form action="{{ path('favori_remove', { mangaAnimeId: fav.mangaAnimes.id }) }}" method="post" class="mx-4 mb-4">
+							<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+								❌ Retirer des Favoris
+							</button>
+						</form>
+					</div>
+				{% endfor %}
+
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}

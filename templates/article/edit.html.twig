@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier : {{ article.title }}{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto p-6 bg-neutral-950 shadow-lg rounded-lg mt-10">
+    <h1 class="text-3xl font-bold mb-8 text-gray-600">Modification de l'article : <span class="text-white">{{ article.title }}</span></h1>
+
+    {{ form_start(articleForm, {'attr': {'class': 'space-y-6'}}) }}
+
+        <div>
+            {{ form_label(articleForm.title, 'Titre de l\'article', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.title, {'attr': {'class': 'w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+            {{ form_errors(articleForm.title) }}
+        </div>
+
+        <div>
+            {{ form_label(articleForm.category, 'Catégorie', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.category, {'attr': {'class': 'w-full border border-gray-300 rounded-md bg-black p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+            {{ form_errors(articleForm.category) }}
+        </div>
+
+        <div>
+            <label for="slug-edit" class="block text-gray-700 font-semibold mb-2">Slug de l'article</label>
+            <input id="slug-edit" name="slug-edit" type="text" value="{{ article.slug }}" class="w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+        </div>
+
+        <div>
+            {{ form_label(articleForm.image, 'Image', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.image, {'attr': {'class': 'w-full'}}) }}
+            {{ form_errors(articleForm.image) }}
+        </div>
+
+        <div>
+            {{ form_label(articleForm.keywords, 'Mots-clés', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.keywords, {'attr': {'class': 'w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+            {{ form_errors(articleForm.keywords) }}
+        </div>
+
+        <div>
+            {{ form_label(articleForm.description, 'Description', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.description, {'attr': {'class': 'w-full border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+            {{ form_errors(articleForm.description) }}
+        </div>
+
+        <div>
+            {{ form_label(articleForm.content, 'Contenu', {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+            {{ form_widget(articleForm.content, {'attr': {'class': 'w-full min-h-[150px] border border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}}) }}
+            {{ form_errors(articleForm.content) }}
+        </div>
+
+        <div class="text-right">
+            {{ form_widget(articleForm.submit, {'attr': {'class': 'bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-md shadow transition'}}) }}
+        </div>
+
+    {{ form_end(articleForm) }}
+
+    <div class="mt-6">
+        <a href="{{ path('article', {'slug': article.slug }) }}" class="text-indigo-600 hover:underline">
+            &larr; Retour à l'article
+        </a>
+    </div>
+</div>
+{% endblock %}

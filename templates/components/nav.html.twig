@@ -26,7 +26,7 @@
 		</a>
 	</div>
 	<div class="navbar-end">
-		<a href="" class="btn btn-ghost btn-circle">
+		<a href="{{ path('search') }}" class="btn btn-ghost btn-circle">
 			<twig:ux:icon name="lucide:search" class="h-6 w-6"/>
 		</a>
 		<div class="dropdown">
@@ -44,6 +44,12 @@
 							<a href="{{ path('user_profile') }}">Mon profil</a>
 						</li>
 					{% endif %}
+					<li>
+						<a href="{{ path('article_new') }}">Rédiger un article</a>
+					</li>
+					<li>
+						<a href="#">Mes favoris</a>
+					</li>
 					<li>
 						<a href="{{ path('app_logout') }}">Déconnexion</a>
 					</li>

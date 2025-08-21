@@ -1,19 +1,36 @@
+{# templates/user/profile.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-<h1>Mon profil</h1>
+<div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8 mt-10">
 
-<p><strong>Nom :</strong> {{ user.username }}</p>
-<p><strong>Email :</strong> {{ user.email }}</p>
+    <h1 class="text-3xl font-bold mb-6 text-gray-900">Mon Profil</h1>
 
-<nav>
-    <ul>
-        <li><a href="{{ path('user_edit_profile') }}">Modifier mon profil</a></li>
-        <li><a href="{{ path('user_new_password') }}">Changer mon mot de passe</a></li>
-        <li><a href="{{ path('user_my_data') }}">Mes données personnelles</a></li>
-        <li><a href="{{ path('user_delete') }}">Supprimer mon compte</a></li>
-    </ul>
-</nav>
+    <div class="flex items-center space-x-6 mb-8">
+        {# Avatar utilisateur si tu as une propriété avatar ou image (à adapter) #}
+        {% if user.avatar %}
+            <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="{{ user.username }}" class="h-24 w-24 rounded-full object-cover shadow-md" />
+        {% else %}
+            <div class="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-xl shadow-md">
+                {{ user.username|slice(0, 1)|upper }}
+            </div>
+        {% endif %}
+
+        <div>
+            <p class="text-xl font-semibold text-gray-800">{{ user.username }}</p>
+            <p class="text-gray-500">{{ user.email }}</p>
+        </div>
+    </div>
+
+    <nav class="border-t pt-4 space-y-3">
+        <ul class="list-disc list-inside text-blue-600 space-y-2">
+            <li><a href="{{ path('user_edit_profile') }}" class="hover:underline">Modifier mon profil</a></li>
+            <li><a href="{{ path('user_new_password') }}" class="hover:underline">Changer mon mot de passe</a></li>
+            <li><a href="{{ path('user_my_data') }}" class="hover:underline">Mes données personnelles</a></li>
+            <li><a href="{{ path('user_delete') }}" class="text-red-600 hover:underline">Supprimer mon compte</a></li>
+        </ul>
+    </nav>
+</div>
 {% endblock %}

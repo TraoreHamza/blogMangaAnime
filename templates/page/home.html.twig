@@ -1,4 +1,59 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-  <h1>Welcome to the Home Page</h1>
+	<div
+		class="bg-gradient-to-b from-purple-800 via-pink-700 to-red-600 min-h-screen text-white font-sans">
+		<!-- HERO -->
+		<section class="relative flex items-center justify-center min-h-[80vh] bg-center bg-cover" style="background-image: url('{{ asset('medias/images/anime-banner.jpg') }}');">
+			<div class="absolute inset-0 bg-black bg-opacity-50"></div>
+			<div class="relative z-10 text-center px-6">
+				<h1 class="text-5xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">
+					Bienvenue dans l'Univers Otaku
+				</h1>
+				<p class="text-lg md:text-xl max-w-2xl mx-auto mb-6">
+					Plonge dans le monde des mangas, animés et héros légendaires comme Luffy, Naruto et Goku !
+				</p>
+				<a href="{{ path('articles') }}" class="px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg shadow-lg hover:bg-yellow-300 transition">
+					Découvrir les derniers articles
+				</a>
+			</div>
+		</section>
+
+		<!-- SECTIONS -->
+		<section class="py-16 px-8 bg-gray-900">
+			<h2 class="text-3xl font-bold mb-10 text-center pb-6">Catégories Populaires</h2>
+			<div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+				<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition">
+					<img src="{{ asset('medias/images/naruto.webp') }}" alt="Naruto" class="w-full h-48 object-cover">
+					<div class="p-5">
+						<h3 class="text-xl font-bold mb-2">Naruto</h3>
+						<p class="text-gray-300 text-sm">Redécouvre l’histoire du ninja blond aux mille techniques.</p>
+					</div>
+				</div>
+				<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition">
+					<img src="{{ asset('medias/images/onepiece.jpg') }}" alt="One Piece" class="w-full h-48 object-cover">
+					<div class="p-5">
+						<h3 class="text-xl font-bold mb-2">One Piece</h3>
+						<p class="text-gray-300 text-sm">Pars à l’aventure avec l’équipage du Chapeau de Paille.</p>
+					</div>
+				</div>
+				<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transition">
+					<img src="{{ asset('medias/images/dragonball.jpg') }}" alt="Dragon Ball" class="w-full h-48 object-cover">
+					<div class="p-5">
+						<h3 class="text-xl font-bold mb-2">Dragon Ball</h3>
+						<p class="text-gray-300 text-sm">Revivez les combats épiques de Son Goku et ses amis.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA -->
+		<section class="py-20 text-center bg-gradient-to-r from-red-500 to-yellow-400 text-black">
+			<h2 class="text-4xl font-extrabold mb-4">Rejoins notre communauté Otaku !</h2>
+			<p class="mb-6 text-lg">Partage ta passion, tes avis et découvre du contenu exclusif.</p>
+			<a href="{{ path('app_register') }}" class="px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition font-semibold">
+				S'inscrire maintenant
+			</a>
+		</section>
+	</div>
 {% endblock %}

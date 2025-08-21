@@ -1,63 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Se connecter{% endblock %}
+{% block title %}Se connecter
+{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-black flex flex-col items-center justify-center gap-4 px-4">
-    <h1 class="text-white text-center text-4xl flex items-center gap-3">
-        {{ ux_icon('fluent-mdl2:room', { class: 'text-5xl h-12 w-12' }) }}
-        Se connecter
-    </h1>
+	<div class="min-h-screen flex flex-col items-center justify-center gap-4">
+		<h1 class="text-white text-center text-4xl flex items-center gap-3">
+			{{ ux_icon('fluent-mdl2:room', { class: 'text-5xl h-12 w-12' }) }}
+			Se connecter
+		</h1>
+		<form method="post" class="w-[320px] max-w-sm  rounded-lg shadow-md p-6 flex flex-col gap-4">
+			{% if error %}
+				<div class="bg-red-200 text-red-800 px-4 py-2 rounded">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
 
-    <form method="post" class="w-full max-w-sm  rounded-lg shadow-md p-6 flex flex-col gap-4">
-        {% if error %}
-            <div class="bg-red-200 text-red-800 px-4 py-2 rounded">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
-            </div>
-        {% endif %}
+			{% if app.user %}
+				<div class="text-center text-gray-800">
+					Vous êtes connecté en tant que
+					<strong>{{ app.user.userIdentifier }}</strong>.
+					<a href="{{ path('app_logout') }}" class="text-cyan-600 hover:underline ml-2">Déconnexion</a>
+				</div>
+			{% endif %}
 
-        {% if app.user %}
-            <div class="text-center text-gray-800">
-                Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>.
-                <a href="{{ path('app_logout') }}" class="text-cyan-600 hover:underline ml-2">Déconnexion</a>
-            </div>
-        {% else %}
-            <input
-                type="email"
-                name="_username"
-                id="username"
-                value="{{ last_username }}"
-                autocomplete="email"
-                required
-                autofocus
-                placeholder="Adresse e-mail"
-                class="w-full border-b border-gray-400 focus:border-cyan-600 focus:outline-none py-2"
-            />
+			<input type="email" placeholder="Votre adresse e-mail" value="{{ last_username }}" name="_username" id="username" class="w-full border-b border-gray-400 focus:border-cyan-600 focus:outline-none py-2" autocomplete="email" required autofocus>
 
-            <input
-                type="password"
-                name="_password"
-                id="password"
-                autocomplete="current-password"
-                required
-                placeholder="Mot de passe"
-                class="w-full border-b border-gray-400 focus:border-cyan-600 focus:outline-none py-2"
-            />
+			<input type="password" placeholder="Tapez votre mot de passe" name="_password" id="password" class="w-full border-b border-gray-400 focus:border-cyan-600 focus:outline-none py-2" autocomplete="current-password" required>
 
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+			<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-            <button
-                type="submit"
-                class="w-full border border-gray-400 flex items-center justify-center gap-2 bg-cyan-700 hover:bg-cyan-800 text-white font-semibold rounded-full px-4 py-2 transition"
-            >
-                {{ ux_icon('lucide:user-circle', { class: 'h-6 w-6' }) }}
-                Se connecter
-            </button>
-        {% endif %}
-    </form>
-
-    <a href="{{ path('app_register') }}" class="text-cyan-500 hover:underline">
-        Créer un compte
-    </a>
-</div>
+			<button type="submit" class="w-full border border-gray-400 flex items-center justify-center gap-2 bg-cyan-700 hover:bg-cyan-800 text-white font-semibold rounded-full px-4 py-2 transition">
+				{{ ux_icon('lucide:user-circle', { class: 'h-6 w-6' }) }}
+				Se connecter
+			</button>
+		</form>
+		<a href="{{ path('app_forgot_password_request')}}" class="text-base">Mot de passe oublié ?</a>
+		<a href="{{ path('app_register') }}" class="text-cyan-500 hover:underline">
+			Créer un compte
+		</a>
+	</div>
 {% endblock %}
