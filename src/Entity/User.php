@@ -26,10 +26,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     private ?string $username = null;
-    
+
     #[ORM\Column(length: 50)]
     private ?string $email = null;
-    
+
     /**
      * @var list<string> The user roles
      */
@@ -51,10 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bio = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
@@ -89,6 +89,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->recommendations = new ArrayCollection();
         $this->favoris = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+    }
+
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création et de modification de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate] // Modification d'un objet de l'entité
+    public function setUpdatedAtValue(): void
+    {
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -161,7 +178,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
 
         return $data;
     }
@@ -225,9 +242,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->created_at = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -280,7 +297,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->recommendations->contains($recommendation)) {
             $this->recommendations->add($recommendation);
-            $recommendation->setUsers($this);
+            $recommendation->setUser($this);
         }
 
         return $this;
@@ -290,8 +307,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->recommendations->removeElement($recommendation)) {
             // set the owning side to null (unless already changed)
-            if ($recommendation->getUsers() === $this) {
-                $recommendation->setUsers(null);
+            if ($recommendation->getUser() === $this) {
+                $recommendation->setUser(null);
             }
         }
 
@@ -340,7 +357,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->reviews->contains($review)) {
             $this->reviews->add($review);
-            $review->setUsers($this);
+            $review->setUser($this);
         }
 
         return $this;
@@ -350,8 +367,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->reviews->removeElement($review)) {
             // set the owning side to null (unless already changed)
-            if ($review->getUsers() === $this) {
-                $review->setUsers(null);
+            if ($review->getUser() === $this) {
+                $review->setUser(null);
             }
         }
 

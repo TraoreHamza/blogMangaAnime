@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
             ->setUsername($faker->userName())
             ->setPassword($this->hasher->hashPassword($user, 'admin'))
             ->setAvatar($faker->imageUrl(640, 480, 'people', true, 'Faker'))
-            ->setWarningCount($faker->numberBetween(0, 1, 2, 3))
+            ->setWarningCount($faker->numberBetween(0, 3))
             ->setIsBanned($faker->boolean(56))
             ->setIsActive($faker->boolean(75))
             ->setCreatedAt(new \DateTimeImmutable())
