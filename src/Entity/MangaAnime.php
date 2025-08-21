@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MangaAnimeRepository::class)]
 class MangaAnime
@@ -21,6 +22,11 @@ class MangaAnime
 
     #[ORM\Column(length: 50)]
     private ?string $type = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, maxMessage: '{{ max }} caractères maximum')]
+    #[Assert\Regex(pattern: '/\.(jpg|jpeg|png|webp)$/')]
+    private ?string $image = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $releaseDate = null;
@@ -69,9 +75,6 @@ class MangaAnime
      */
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'mangaAnimes')]
     private Collection $categories;
-
-    #[ORM\Column(length: 255)]
-    private ?string $coverImage = null;
 
     public function __construct()
     {
@@ -218,7 +221,7 @@ class MangaAnime
     {
         if (!$this->recommendations->contains($recommendation)) {
             $this->recommendations->add($recommendation);
-            $recommendation->setMangaAnimes($this);
+            $recommendation->setMangaAnime($this);
         }
 
         return $this;
@@ -228,8 +231,8 @@ class MangaAnime
     {
         if ($this->recommendations->removeElement($recommendation)) {
             // set the owning side to null (unless already changed)
-            if ($recommendation->getMangaAnimes() === $this) {
-                $recommendation->setMangaAnimes(null);
+            if ($recommendation->getMangaAnime() === $this) {
+                $recommendation->setMangaAnime(null);
             }
         }
 
@@ -322,15 +325,14 @@ class MangaAnime
 
         return $this;
     }
-
-    public function getCoverImage(): ?string
+    public function getImage(): ?string
     {
-        return $this->coverImage;
+        return $this->image;
     }
 
-    public function setCoverImage(string $coverImage): static
+    public function setImage(string $image): static
     {
-        $this->coverImage = $coverImage;
+        $this->image = $image;
 
         return $this;
     }

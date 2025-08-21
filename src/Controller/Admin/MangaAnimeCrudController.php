@@ -53,7 +53,8 @@ class MangaAnimeCrudController extends AbstractCrudController
             ImageField::new('image')
                 ->setBasePath('medias/images/')
                 ->setUploadDir('public/medias/images/')
-                ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]'),
+                ->setUploadedFileNamePattern('[randomhash].[extension]')
+                ->setRequired(false)
         ];
     }
 }

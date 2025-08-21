@@ -43,22 +43,26 @@ class MangaAnimeRepository extends ServiceEntityRepository
 
     // App\Repository\MangaAnimeRepository.php
 
+
     public function findByFilters(array $filters): array
     {
         $qb = $this->createQueryBuilder('m');
 
-        if (!empty($filters['name'])) {
-            $qb->andWhere('m.name LIKE :name')
-                ->setParameter('name', '%' . $filters['name'] . '%');
-        }
+        // Filtrer par genre si défini et non vide
         if (!empty($filters['genre'])) {
-            $qb->andWhere('m.genre LIKE :genre')
-                ->setParameter('genre', '%' . $filters['genre'] . '%');
+            $qb->andWhere('LOWER(m.genre) = :genre')
+                ->setParameter('genre', strtolower($filters['genre']));
         }
-        if (!empty($filters['year'])) {
-            $qb->andWhere('m.year = :year')
-                ->setParameter('year', $filters['year']);
+
+        // Filtrer par type si défini et non vide
+        if (!empty($filters['type'])) {
+            $qb->andWhere('LOWER(m.type) = :type')
+                ->setParameter('type', strtolower($filters['type']));
         }
+
+        // Ordre par popularité décroissante par défaut
+        $qb->orderBy('m.popularity', 'DESC');
+
         return $qb->getQuery()->getResult();
     }
 
@@ -78,6 +82,16 @@ class MangaAnimeRepository extends ServiceEntityRepository
             ->andWhere($orX)
             ->orderBy('m.popularity', 'DESC')
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function searchByTitle(string $query): array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.title LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
