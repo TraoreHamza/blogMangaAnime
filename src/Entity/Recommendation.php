@@ -13,14 +13,14 @@ class Recommendation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $score = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $score = 0;
 
     #[ORM\ManyToOne(inversedBy: 'recommendations')]
-    private ?User $users = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'recommendations')]
-    private ?MangaAnime $mangaAnimes = null;
+    private ?MangaAnime $mangaAnime = null;
 
     public function getId(): ?int
     {
@@ -39,26 +39,26 @@ class Recommendation
         return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(?User $user): self
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getMangaAnimes(): ?MangaAnime
+    public function getMangaAnime(): ?MangaAnime
     {
-        return $this->mangaAnimes;
+        return $this->mangaAnime;
     }
 
-    public function setMangaAnimes(?MangaAnime $mangaAnimes): static
+    public function setMangaAnime(?MangaAnime $mangaAnime): static
     {
-        $this->mangaAnimes = $mangaAnimes;
+        $this->mangaAnime = $mangaAnime;
 
         return $this;
     }

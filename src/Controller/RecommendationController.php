@@ -72,22 +72,28 @@ final class RecommendationController extends AbstractController
         }
         $this->entityManager->flush();
 
-        return $this->render('recommendation/list.html.twig', [
-            'recommendations' => $recommendationsData,
-            'user' => $user,
-        ]);
+        // Redirection vers la liste des recommandations pour l'utilisateur
+        return $this->redirectToRoute('recommendation_user', ['userId' => $user->getId()]);
     }
 
     // Obtenir des recommandations pour un utilisateur spécifique
-    #[Route('/recommendations/user/{userId}', name: 'recommendation_get_by_user', methods: ['GET'])]
-    public function getByUser(int $userId): Response
+    #[Route('/recommendations/user/{userId}', name: 'recommendation_user', methods: ['GET'])]
+    public function getByUser(string $userId): Response
     {
+        if (!ctype_digit($userId)) {
+            throw $this->createNotFoundException("L'identifiant utilisateur doit être un entier.");
+        }
+
+        $userId = (int) $userId;
+
         $user = $this->userRepository->find($userId);
+
         if (!$user) {
             throw $this->createNotFoundException("Utilisateur non trouvé.");
         }
 
-        $favGenres = $user->getFavoriteGenres() ?? [];
+        $favGenres = $user->getFavoris() ?? [];
+
         if (empty($favGenres)) {
             $recommendations = $this->mangaAnimeRepository->findBy([], ['popularity' => 'DESC'], 5);
         } else {
@@ -100,8 +106,9 @@ final class RecommendationController extends AbstractController
         ]);
     }
 
+
     // Obtenir des recommandations pour un manga/anime donné (par similarité de genre)
-    #[Route('/recommendations/manga/{mangaId}', name: 'recommendation_get_by_manga', methods: ['GET'])]
+    #[Route('/recommendations/manga/{mangaId}', name: 'recommendation_manga', methods: ['GET'])]
     public function getByManga(int $mangaId): Response
     {
         $manga = $this->mangaAnimeRepository->find($mangaId);
