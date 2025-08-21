@@ -39,8 +39,8 @@ class ReviewForm extends AbstractType
                     new Assert\Range([
                         'min' => 1,
                         'max' => 5,
-                        'minMessage' => 'La note doit être au minimum {{ limit }}',
-                        'maxMessage' => 'La note ne peut pas dépasser {{ limit }}',
+                        'notInRangeMessage' => 'La note doit être au minimum {{ limit }}',
+                        'notInRangeMessage' => 'La note ne peut pas dépasser {{ limit }}',
                     ]),
                 ],
                 'attr' => [

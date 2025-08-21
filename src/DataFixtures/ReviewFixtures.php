@@ -36,7 +36,7 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
                 ->setCreatedAt(new \DateTimeImmutable())
                 ->setStatus($faker->randomElement()) // Statut aléatoire
                 ->setMangaAnimes($faker->randomElement($mangaAnime)) // Associe une mangaAnime aléatoire
-                ->setUsers($faker->randomElement($users)) // Associe un utilisateur aléatoire
+                ->setUser($faker->randomElement($users)) // Associe un utilisateur aléatoire
             ;
             $manager->persist($review);
             $this->addReference('REVIEW_' . $i, $review);
