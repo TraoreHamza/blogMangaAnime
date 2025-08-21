@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250730231949 extends AbstractMigration
+final class Version20250811140439 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -44,21 +44,21 @@ final class Version20250730231949 extends AbstractMigration
         , CONSTRAINT FK_EF85A2CC67B3B43D FOREIGN KEY (users_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_EF85A2CC9CCE44B2 FOREIGN KEY (manga_animes_id) REFERENCES manga_anime (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_EF85A2CC67B3B43D ON favori (users_id)');
         $this->addSql('CREATE INDEX IDX_EF85A2CC9CCE44B2 ON favori (manga_animes_id)');
-        $this->addSql('CREATE TABLE manga_anime (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title VARCHAR(50) NOT NULL, type VARCHAR(50) NOT NULL, release_date DATETIME DEFAULT NULL, popularity INTEGER NOT NULL, synopsis CLOB NOT NULL, author VARCHAR(50) NOT NULL, studio VARCHAR(50) NOT NULL, genre VARCHAR(50) NOT NULL, number_of_volumes INTEGER NOT NULL, number_of_episodes INTEGER NOT NULL, cover_image VARCHAR(255) NOT NULL)');
-        $this->addSql('CREATE TABLE recommendation (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, users_id INTEGER DEFAULT NULL, manga_animes_id INTEGER DEFAULT NULL, score INTEGER NOT NULL, CONSTRAINT FK_433224D267B3B43D FOREIGN KEY (users_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_433224D29CCE44B2 FOREIGN KEY (manga_animes_id) REFERENCES manga_anime (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
-        $this->addSql('CREATE INDEX IDX_433224D267B3B43D ON recommendation (users_id)');
-        $this->addSql('CREATE INDEX IDX_433224D29CCE44B2 ON recommendation (manga_animes_id)');
+        $this->addSql('CREATE TABLE manga_anime (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title VARCHAR(50) NOT NULL, type VARCHAR(50) NOT NULL, image VARCHAR(255) NOT NULL, release_date DATETIME DEFAULT NULL, popularity INTEGER NOT NULL, synopsis CLOB NOT NULL, author VARCHAR(50) NOT NULL, studio VARCHAR(50) NOT NULL, genre VARCHAR(50) NOT NULL, number_of_volumes INTEGER NOT NULL, number_of_episodes INTEGER NOT NULL)');
+        $this->addSql('CREATE TABLE recommendation (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, manga_anime_id INTEGER DEFAULT NULL, score INTEGER NOT NULL, CONSTRAINT FK_433224D2A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_433224D2ED239CA FOREIGN KEY (manga_anime_id) REFERENCES manga_anime (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_433224D2A76ED395 ON recommendation (user_id)');
+        $this->addSql('CREATE INDEX IDX_433224D2ED239CA ON recommendation (manga_anime_id)');
         $this->addSql('CREATE TABLE reset_password_request (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER NOT NULL, selector VARCHAR(20) NOT NULL, hashed_token VARCHAR(100) NOT NULL, requested_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , expires_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_7CE748AA76ED395 ON reset_password_request (user_id)');
-        $this->addSql('CREATE TABLE review (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, users_id INTEGER DEFAULT NULL, manga_animes_id INTEGER DEFAULT NULL, content CLOB DEFAULT NULL, rating INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
-        , status VARCHAR(50) DEFAULT NULL, CONSTRAINT FK_794381C667B3B43D FOREIGN KEY (users_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_794381C69CCE44B2 FOREIGN KEY (manga_animes_id) REFERENCES manga_anime (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
-        $this->addSql('CREATE INDEX IDX_794381C667B3B43D ON review (users_id)');
+        $this->addSql('CREATE TABLE review (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, user_id INTEGER DEFAULT NULL, manga_animes_id INTEGER DEFAULT NULL, content CLOB DEFAULT NULL, rating INTEGER NOT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+        , status VARCHAR(50) DEFAULT NULL, CONSTRAINT FK_794381C6A76ED395 FOREIGN KEY (user_id) REFERENCES "user" (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_794381C69CCE44B2 FOREIGN KEY (manga_animes_id) REFERENCES manga_anime (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
+        $this->addSql('CREATE INDEX IDX_794381C6A76ED395 ON review (user_id)');
         $this->addSql('CREATE INDEX IDX_794381C69CCE44B2 ON review (manga_animes_id)');
         $this->addSql('CREATE TABLE "user" (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username VARCHAR(180) NOT NULL, email VARCHAR(50) NOT NULL, roles CLOB NOT NULL --(DC2Type:json)
-        , password VARCHAR(255) NOT NULL, avatar VARCHAR(50) DEFAULT NULL, warning_count INTEGER NOT NULL, bio VARCHAR(255) DEFAULT NULL, created_at DATETIME DEFAULT NULL --(DC2Type:datetime_immutable)
-        , updated_at DATETIME DEFAULT NULL --(DC2Type:datetime_immutable)
+        , password VARCHAR(255) NOT NULL, avatar VARCHAR(50) DEFAULT NULL, warning_count INTEGER NOT NULL, bio VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
+        , updated_at DATETIME NOT NULL --(DC2Type:datetime_immutable)
         , is_active BOOLEAN NOT NULL, is_banned BOOLEAN NOT NULL, is_verified BOOLEAN NOT NULL)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_USERNAME ON "user" (username)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON "user" (email)');
