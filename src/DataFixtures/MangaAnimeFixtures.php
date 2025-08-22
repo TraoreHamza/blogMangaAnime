@@ -49,7 +49,7 @@ class MangaAnimeFixtures extends Fixture
                 'author' => 'Koyoharu Gotouge',
                 'studio' => 'ufotable',
                 'genre' => 'action, aventure, drame',
-                'coverImage' => 'dms.jpg',
+                'coverImage' => 'demonslayers.jpg',
                 'numberOfVolumes' => 23,
                 'numberOfEpisodes' => 55,
             ],
@@ -167,7 +167,7 @@ class MangaAnimeFixtures extends Fixture
                 'author' => 'Tatsuki Fujimoto',
                 'studio' => 'MAPPA',
                 'genre' => 'action, horreur, comédie',
-                'coverImage' => 'chainsawman.webp',
+                'coverImage' => 'chainsawman.jpg',
                 'numberOfVolumes' => 11,
                 'numberOfEpisodes' => 24,
             ],
@@ -329,7 +329,7 @@ class MangaAnimeFixtures extends Fixture
                     ->setAuthor($item['author'])
                     ->setStudio($item['studio'])
                     ->setGenre($item['genre'] ?? 'unknown') 
-                    ->setCoverImage($item['coverImage'])
+                    ->setImage($item['coverImage'])
                     ->setnumberOfVolumes($item['numberOfVolumes'])
                     ->setNumberOfEpisodes($item['numberOfEpisodes'])
                 ;
