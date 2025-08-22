@@ -41,7 +41,6 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
                 $comment = new Comment();
                 $comment
                     ->setContent($faker->paragraph(3))
-                    ->setCreatedAt(new \DateTimeImmutable())
                     ->setIsModerated($faker->boolean(80)) // 80% de chance que le commentaire soit modéré
                     ->setIsPublished($faker->boolean(90)) // 90% de chance que le commentaire soit publié
                     ->setAuthor($faker->randomElement($users)) // Associe un utilisateur aléatoire

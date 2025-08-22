@@ -5,7 +5,9 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Service\ModerationService;
+use App\Repository\ReviewRepository;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,28 +17,47 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CommentController extends AbstractController
 {
+    public function __construct(
+        private CommentRepository $commentRepository,
+        private EntityManagerInterface $em
+    ) {}
     #[Route('/comment/new/{article}', name: 'comment_new', methods: ['POST'])]
     public function new(
-            int $article, 
-            Request $request, // permet de gérer les requêtes HTTP (params, etc..)
-            ArticleRepository $ar,
-            EntityManagerInterface $em, // permet d'interagir avec la BDD
-            ModerationService $ms,
-            // ReviewRepository $reviewRepository
+        int $article,
+        Request $request, // permet de gérer les requêtes HTTP (params, etc..)
+        ArticleRepository $ar,
+        EntityManagerInterface $em, // permet d'interagir avec la BDD
+        ModerationService $ms,
+        ReviewRepository $reviewRepository
     ): Response {
         $articleComment = $ar->find($article); // Récupération de l'article
         $user = $this->getUser(); // Récupération de l'utilisateur en cours
-        if(!$article) { // Ce sera ignorer si l'article existe
+        if (!$article) { // Ce sera ignorer si l'article existe
             $this->addFlash('error', "L'article n'existe pas");
             return $this->redirectToRoute('articles');
         }
 
+        // review
+        $reviewId = $request->request->get('review_id');
+        $review = null;
+        if ($reviewId) {
+            $review = $reviewRepository->find($reviewId);
+            if (!$review) {
+                $this->addFlash('error', "La review est introuvable");
+                return $this->redirectToRoute('article', ['slug' => $articleComment->getSlug()]);
+            }
+        }
         $comment = new Comment();
         $comment
             ->setAuthor($user)
             ->setArticle($articleComment)
             ->setContent($request->request->get('content'))
         ;
+
+        // Associer la review au commentaire si présente
+        if ($review) {
+            $comment->setReviews($review);
+        }
 
         $em->persist($comment); // Enregistrement de l'article (query SQL)
         $em->flush($comment); // Exécution de l'enregistrement en BDD
@@ -49,7 +70,6 @@ final class CommentController extends AbstractController
         return $this->redirectToRoute('article', ['slug' => $articleComment->getSlug()]);
     }
 
-    
     /**  DELETE - Suppression d’un commentaire */
     #[Route('/{id}/delete', name: 'comment_delete', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
@@ -72,17 +92,29 @@ final class CommentController extends AbstractController
         return $this->redirect($request->headers->get('referer', '/'));
     }
 
-    /**  REPORT - Signalement d’abus */
-    #[Route('/{id}/report', name: 'comment_report', methods: ['POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function report(Request $request, Comment $comment): Response
+    // Signalement d'un commentaire
+    #[Route('/comment/{id}/report', name: 'comment_report', methods: ['POST'])]
+    public function report(int $id, Request $request): Response
     {
-        // Exemple simple : on ajoute un flag (peut être ajouté à l'entité)
-        $comment->setIsModerated(true); // Tu peux créer un champ `isReported` si besoin
+        // Validation CSRF
+        if (!$this->isCsrfTokenValid('report-comment-' . $id, $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Token CSRF invalide.');
+            return $this->redirectToRoute('articles');
+        }
 
-        // $this->em->flush();
+        $comment = $this->commentRepository->find($id);
+        if (!$comment) {
+            $this->addFlash('danger', 'Commentaire introuvable.');
+            return $this->redirectToRoute('articles');
+        }
 
-        $this->addFlash('success', 'Commentaire signalé à un modérateur.');
-        return $this->redirect($request->headers->get('referer', '/'));
+        // Ici on considère que signaler un commentaire met isModerated à true
+        $comment->setIsModerated(true);
+        $this->em->flush();
+
+        $this->addFlash('warning', 'Le commentaire a été signalé et sera examiné.');
+
+        // Retour vers la page précédente
+        return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('articles'));
     }
 }

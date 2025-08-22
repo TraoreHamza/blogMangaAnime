@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Comment
 {
     #[ORM\Id]
@@ -18,7 +19,7 @@ class Comment
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
     private ?bool $is_moderated = null;
@@ -36,6 +37,27 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Review $reviews = null;
+
+    /**
+     * Les évènements du cycle de vie de l'entité
+     * La mise à jour des dates de création de l'entité
+     */
+    #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function initializeFlags(): void
+    {
+        if ($this->is_moderated === null) {
+            $this->is_moderated = false;
+        }
+        if ($this->is_published === null) {
+            $this->is_published = false;
+        }
+    }
 
     public function getId(): ?int
     {
@@ -56,12 +78,12 @@ class Comment
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -90,7 +112,7 @@ class Comment
         return $this;
     }
 
-        public function getAuthor(): ?User
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -102,7 +124,7 @@ class Comment
         return $this;
     }
 
-        public function getArticle(): ?Article
+    public function getArticle(): ?Article
     {
         return $this->article;
     }
