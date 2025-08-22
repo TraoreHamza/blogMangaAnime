@@ -29,10 +29,11 @@ class ArticleCrudController extends AbstractCrudController
             BooleanField::new('is_archived'),
             AssociationField::new('category')->renderAsNativeWidget(),
             ImageField::new('image')
+                ->setLabel('Sélectionnez une image')
                 ->setBasePath('medias/images/')
                 ->setUploadDir('public/medias/images/')
-                ->setUploadedFileNamePattern('[year]/[month]/[day]/[slug]-[contenthash].[extension]')
-                ,
+                ->setUploadedFileNamePattern('[randomhash].[extension]')
+                ->setRequired(false),
         ];
     }
 }

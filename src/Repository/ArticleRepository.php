@@ -40,4 +40,17 @@ class ArticleRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // src/Repository/ArticleRepository.php
+
+    public function searchByTitle(string $query): array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.title LIKE :query')
+            ->setParameter('query', '%' . $query . '%')
+            ->orderBy('a.created_at', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }

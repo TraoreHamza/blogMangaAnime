@@ -31,6 +31,9 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             ->setPassword($this->hasher->hashPassword($admin, 'admin'))
             ->setWarningCount(0)
             ->setRoles(['ROLE_ADMIN'])
+            ->setIsBanned(false)
+            ->setIsActive(true)
+            ->setIsVerified(true)
         ;
 
         $manager->persist($admin);
