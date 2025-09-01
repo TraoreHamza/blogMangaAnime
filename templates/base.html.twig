@@ -13,7 +13,6 @@
 		{% block stylesheets %}
 			<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css"/>
 			<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-
 		{% endblock %}
 
 		{% block javascripts %}
@@ -26,15 +25,16 @@
 	</head>
 	<body>
 		<style>
-		 body {
-			background-color: black; /* Couleur de fond sombre */
-			color: #ffff; /* Couleur de texte claire */
-		 }
+			body {
+				background-color: black; /* Couleur de fond sombre */
+				color: #ffff; /* Couleur de texte claire */
+			}
 		</style>
-
+		{# /* Navigation */ #}
 		<twig:nav/>
 		<main id="swup" class="container mx-auto px-4"> {% block body %}{% endblock %}
 			</main>
+		{# Pied de page #}
 			<twig:footer/>
 		</body>
 	</html>
