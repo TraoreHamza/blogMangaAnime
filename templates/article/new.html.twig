@@ -3,6 +3,7 @@
 {% block title %}Création d'un article{% endblock %}
 
 {% block body %}
+<div class="min-h-screen flex flex-col items-center justify-center bg-black py-8 px-4">
 <h1 class="text-center text-3xl my-4">Création d'un article</h1>
 <div class="grid place-items-center">
     <div class="bg-neutral-900 shadow-md rounded-lg p-4">
@@ -14,5 +15,6 @@
     <twig:ux:icon name="lucide:arrow-left" class="h-6 w-6" />
     <a href="{{ path('articles') }}" class="text-center my-4">Retour aux articles</a>
 </p>
+</div>
 
 {% endblock %}

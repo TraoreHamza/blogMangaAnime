@@ -1,23 +1,25 @@
 <div{{attributes}} class="">
+{# Champs de recherche avec résultats dynamiques #}
 <label class="relative flex items-center mt-1 border-b rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 px-5 py-3 max-w-xl mx-auto">
     <input
         type="text"
         data-model="query"
-        class="block w-full pl-12 pr-4 text-gray-700 placeholder-gray-500 bg-transparent focus:outline-none focus:ring-0 focus:placeholder-gray-300"
+        class="block w-full pl-12 pr-4 text-white placeholder-gray-500 bg-transparent focus:outline-none focus:ring-0 focus:placeholder-gray-300"
         placeholder="Recherche..."
         autocomplete="off"
         spellcheck="false"
     />
 </label>
-
-
+   {# Articles et Mangas/Animes correspondants #}
+	{# Résultats de la recherche #}
 	<div class="mt-10">
 		<h2 class="text-xl font-semibold mb-4">Articles</h2>
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
 			{% set articles = this.results.articles %}
 			{% if articles is not empty %}
 				{% for item in articles %}
-					<a href="{{ path('article', {'slug': item.slug}) }}" class="col-span-1 shadow bg-neutral-900 border-l-2 border-slate-400 rounded-md p-4 grid grid-rows-3 h-44 hover:shadow-xl transition duration-300 ease-in-out">
+					<a href="{{ path('article', {'slug': item.slug}) }}" class="col-span-1 shadow bg-neutral-900 border-l-2 
+					border-slate-400 rounded-md p-4 grid grid-rows-3 h-44 hover:shadow-xl transition duration-300 ease-in-out">
 						<p class="row-span-1 flex items-center justify-center gap-2 text-sm hover:text-violet-950">
 							<twig:ux:icon name="lucide:clock" class="w-3 h-3"/>
 							Publié il y a
@@ -27,7 +29,7 @@
 					</a>
 				{% endfor %}
 			{% else %}
-				<p>Aucun article correspondant.</p>
+				<p class="text-center">Aucun article correspondant.</p>
 			{% endif %}
 		</div>
 		{# Mangas/Animes #}
@@ -47,7 +49,7 @@
 					</a>
 				{% endfor %}
 			{% else %}
-				<p>Aucun manga ou anime correspondant</p>
+				<p class="text-center">Aucun manga ou anime correspondant</p>
 			{% endif %}
 		</div>
 	</div>

@@ -7,9 +7,9 @@
 
 {% block body %}
 	<div
-		class="w-full mx-auto bg-gray-900 text-gray-100 rounded-3xl overflow-hidden shadow-2xl mb-12">
+		class="w-full mx-auto text-gray-100 rounded-3xl overflow-hidden shadow-2xl mb-12">
 		{# Image couverture avec bordure bleu vif et ombre subtile #}
-		<div class="relative bg-gradient-to-b from-blue-900 via-gray-900 to-gray-900 pb-8 pt-6 px-6 shadow-inner rounded-b-3xl">
+		<div class="relative bg-gradient-to-b pb-8 pt-6 px-6 shadow-inner rounded-b-3xl">
 			<img src="{{ asset('medias/images/' ~ mangaAnime.image) }}" alt="Couverture de {{ mangaAnime.title }}" class="w-full max-h-96 object-cover rounded-xl border-4 border-blue-500 shadow-lg mx-auto"/>
 			<h2 class="mt-6 text-4xl font-extrabold tracking-tight text-white drop-shadow-lg">
 				{{ mangaAnime.title }}
@@ -20,57 +20,72 @@
 				&nbsp;|&nbsp;
 				<span class="italic">{{ mangaAnime.author }}</span>
 			</div>
-		</div>
-
-		{# Synopsis avec titre et textes bien espacés #}
-		<div class="px-8 py-8">
-			<h3 class="text-2xl text-blue-500 font-semibold mb-4 border-b border-blue-700 pb-2">Synopsis</h3>
-			<p class="mb-6 text-gray-300 leading-relaxed font-medium">{{ mangaAnime.synopsis }}</p>
-
-			{# Affichage des genres sous forme de tags arrondis #}
-			{% if mangaAnime.genre %}
-				<div class="flex flex-wrap gap-3">
-					{% for genre in mangaAnime.genre|split(',') %}
-						<span class="bg-blue-800/90 text-blue-100 px-4 py-2 rounded-full text-sm font-semibold tracking-wide shadow-inner select-none">
-							{{ genre|trim|capitalize }}
-						</span>
+			{% if is_granted('ROLE_USER') %}
+				<div id="rating-stars" class="flex space-x-1 text-yellow-500 cursor-pointer" title="Cliquez pour noter">
+					{% for i in 1..5 %}
+						<svg data-star="{{ i }}" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24" class="w-6 h-6 text-gray-400 hover:text-orange-500 transition">
+							<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+						</svg>
 					{% endfor %}
+					<span class="text-white font-semibold ml-2">
+						Note Moyenne :
+						{{ averageRating|number_format(1, '.', ',') }}
+					</span>
+				</div>
+			{% else %}
+				<div class="flex space-x-1 text-yellow-500 cursor-not-allowed" title="Se connecter ou créer un compte pour faire ça">
+					{% for i in 1..5 %}
+						<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewbox="0 0 24 24" class="w-6 h-6 text-gray-400">
+							<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+						</svg>
+					{% endfor %}
+
 				</div>
 			{% endif %}
 		</div>
+		{# Affichage des genres sous forme de tags arrondis #}
+		{% if mangaAnime.genre %}
+			<div class="flex flex-wrap gap-3">
+				{% for genre in mangaAnime.genre|split(',') %}
+					<span class="bg-blue-800/90 text-blue-100 px-4 py-2 rounded-full text-sm font-semibold tracking-wide shadow-inner select-none">
+						{{ genre|trim|capitalize }}
+					</span>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
 
-		{# Bloc infos meta bien structuré en responsive #}
-		<div class="bg-gradient-to-t from-gray-800/90 to-transparent px-8 py-6 border-t border-blue-800 flex flex-col gap-6 text-gray-300 text-base font-medium">
-			<div>
-				<span class="font-semibold text-blue-400">Auteur :</span>
-				<hr>
-				{{ mangaAnime.author }}
-			</div>
-			<div>
-				<span class="font-semibold text-blue-400">Studio :</span>
-				<hr>
-				{{ mangaAnime.studio }}
-			</div>
-			<div>
-				<span class="font-semibold text-blue-400">Sortie :</span>
-				<hr>
-				{{ mangaAnime.releaseDate|date('d F Y') }}
-			</div>
-			<div>
-				<span class="font-semibold text-blue-400">Popularité :</span>
-				<hr>
-				{{ mangaAnime.popularity }}/100
-			</div>
-			<div>
-				<span class="font-semibold text-blue-400">Volumes :</span>
-				<hr>
-				{{ mangaAnime.numberOfVolumes }}
-			</div>
-			<div>
-				<span class="font-semibold text-blue-400">Épisodes :</span>
-				<hr>
-				{{ mangaAnime.numberOfEpisodes }}
-			</div>
+	{# Bloc infos meta bien structuré en responsive #}
+	<div class="bg-gradient-to-t from-gray-800/90 to-transparent px-8 py-6 border-t border-blue-800 flex flex-col gap-6 text-gray-300 text-base font-medium">
+		<div>
+			<span class="font-semibold text-blue-400">Auteur :</span>
+			<hr>
+			{{ mangaAnime.author }}
+		</div>
+		<div>
+			<span class="font-semibold text-blue-400">Studio :</span>
+			<hr>
+			{{ mangaAnime.studio }}
+		</div>
+		<div>
+			<span class="font-semibold text-blue-400">Sortie :</span>
+			<hr>
+			{{ mangaAnime.releaseDate|date('d F Y') }}
+		</div>
+		<div>
+			<span class="font-semibold text-blue-400">Popularité :</span>
+			<hr>
+			{{ mangaAnime.popularity }}/100
+		</div>
+		<div>
+			<span class="font-semibold text-blue-400">Volumes :</span>
+			<hr>
+			{{ mangaAnime.numberOfVolumes }}
+		</div>
+		<div>
+			<span class="font-semibold text-blue-400">Épisodes :</span>
+			<hr>
+			{{ mangaAnime.numberOfEpisodes }}
 		</div>
 	</div>
-{% endblock %}
+</div>{% endblock %}

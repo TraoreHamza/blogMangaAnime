@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<style>
 		.scrollbar-hide::-webkit-scrollbar {
 			display: none;
@@ -14,32 +15,95 @@
 			-ms-overflow-style: none;
 			scrollbar-width: none;
 		}
+		.btn-favori {
+			background: none;
+			border: none;
+			cursor: pointer;
+			font-size: 24px;
+			color: gray;
+			transition: color 0.3s ease;
+		}
+
+		.btn-favori.active {
+			color: #dc2626; /* Rouge vif */
+		}
 	</style>
-	<div class="mb-8"></div>
+
+	<div class="relative inline-block font-sans select-none filter-container">
+		<button id="filter-toggle" aria-label="Filtrer" class="flex items-center gap-2 bg-transparent border-none font-bold text-sm cursor-pointer text-gray-800 filter-toggle">
+			<span>FILTRER</span>
+			<svg class="stroke-current text-gray-600 w-4.5 h-4.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" width="18" height="18">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v5.172a1 1 0 01-2 0v-5.172a1 1 0 00-.293-.707L3.293 6.707A1 1 0 013 6V4z"/>
+			</svg>
+		</button>
+
+		<div id="filter-dropdown" class="absolute top-full right-0 mt-2 bg-gray-900 text-gray-200 shadow-lg rounded p-4 w-44 z-50 hidden filter-dropdown">
+			<fieldset class="border-none mb-4 p-0">
+				<legend class="font-bold mb-2">Langue</legend>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="langue" value="tout" checked class="mr-2"/>
+					Tout
+				</label>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="langue" value="sous-titre" class="mr-2"/>
+					Sous-titrage
+				</label>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="langue" value="doublage" class="mr-2"/>
+					Doublage
+				</label>
+			</fieldset>
+
+			<fieldset class="border-none p-0">
+				<legend class="font-bold mb-2">Médias</legend>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="media" value="tout" checked class="mr-2"/>
+					Tout
+				</label>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="media" value="serie" class="mr-2"/>
+					Série
+				</label>
+				<label class="block cursor-pointer mb-1 text-xs">
+					<input type="radio" name="media" value="film" class="mr-2"/>
+					Films
+				</label>
+			</fieldset>
+		</div>
+	</div>
+
+	{# Afficher la liste des mangas/animes #}
+	{# Section des plus populaires #}
 	<div class="mb-8 relative">
 		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Les plus populaires</h2>
 		<button id="scroll-left" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<button id="scroll-right" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<div id="scroll-container" class="overflow-x-auto scrollbar-hide">
 			<div class="flex space-x-6">
 				{% set populaires = mangaAnimes|sort((a, b) => b.popularity <=> a.popularity) %}
 				{% for manga in populaires %}
 					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
-						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
-						<div class="p-4 text-center">
-							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
-							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100 brightness-50">
+						<div class="p-4 flex items-center justify-between">
+							<div>
+								<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+								<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+							</div>
 							{# Formulaire pour ajouter aux favoris #}
 							<form action="{{ path('favori_add', { mangaAnimeId: manga.id }) }}" method="post" class="mx-4 my-2">
-								<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
-									❤️ Ajouter aux Favoris
+								<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition btn-favori">
+									{{ ux_icon('bx:heart', { class: 'h-6 w-6' }) }}
 								</button>
 							</form>
 						</div>
+						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1 flex items-center gap-2 text-sm hover:text-violet-950">
+							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
+							Voir les détails
+						</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -49,21 +113,34 @@
 	<div class="mb-8 relative">
 		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Les classiques</h2>
 		<button id="scroll-left-classic" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<button id="scroll-right-classic" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<div id="scroll-container-classic" class="overflow-x-auto scrollbar-hide">
 			<div class="flex space-x-6">
 				{% set classiques = mangaAnimes|filter(m => m.releaseDate < date('2000-01-01')) %}
 				{% for manga in classiques %}
 					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
-						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
-						<div class="p-4 text-center">
-							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
-							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100  brightness-50">
+						<div class="p-4 flex items-center justify-between">
+							<div>
+								<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+								<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+							</div>
+							{# Formulaire pour ajouter aux favoris #}
+							<form action="{{ path('favori_add', { mangaAnimeId: manga.id }) }}" method="post" class="mx-4 my-2">
+								<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition btn-favori">
+									{{ ux_icon('bx:heart', { class: 'h-6 w-6' }) }}
+								</button>
+							</form>
 						</div>
+						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1
+							flex items-center gap-2 text-sm hover:text-violet-950">
+							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
+							Voir les détails
+						</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -73,39 +150,47 @@
 	{# Section des nouveautés #}
 	<div class="mb-8 relative">
 		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Nouveau</h2>
-		<button id="scroll-left-new" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		<button id="scroll-left-new" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-4 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-10 h-10'}) }}
 		</button>
-		<button id="scroll-right-new" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		<button id="scroll-right-new" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-4 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<div id="scroll-container-new" class="overflow-x-auto scrollbar-hide">
 			<div class="flex space-x-6">
 				{% set nouveaux = mangaAnimes|filter(m => m.releaseDate > date('2025-01-01')) %}
 				{% for manga in nouveaux %}
 					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
-						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
-						<div class="p-4 text-center">
-							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
-							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100 brightness-50">
+						<div class="p-4 flex items-center justify-between">
+							<div>
+								<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+								<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+							</div>
+							{# Formulaire pour ajouter aux favoris #}
+							<form action="{{ path('favori_add', { mangaAnimeId: manga.id }) }}" method="post" class="mx-4 my-2">
+								<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition btn-favori">
+									{{ ux_icon('bx:heart', { class: 'h-6 w-6' }) }}
+								</button>
+							</form>
 						</div>
-						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="block mx-4 my-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 text-center transition">
-							Voir Détails
+						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1 flex items-center gap-2 text-sm hover:text-violet-950">
+							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
+							Voir les détails
 						</a>
 					</div>
 				{% endfor %}
 			</div>
 		</div>
 	</div>
-
 	{# Section Monstre & Démon #}
 	<div class="mb-8 relative">
 		<h2 class="text-2xl font-bold mb-4 pb-2 border-b border-gray-800">Monstre & Démon</h2>
-		<button id="scroll-left-md" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-6 h-6'}) }}
+		<button id="scroll-left-md" aria-label="Scroll gauche" class="absolute left-0 top-1/2 -translate-y-1/2 bg-transparent p-4 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-left-outline', {class: 'w-10 h-10'}) }}
 		</button>
-		<button id="scroll-right-md" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-2 rounded-full shadow z-10 hover:bg-gray-100">
-			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-6 h-6'}) }}
+		<button id="scroll-right-md" aria-label="Scroll droite" class="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent p-4 rounded-full shadow z-10 hover:bg-gray-100">
+			{{ ux_icon('flowbite:angle-right-outline', {class: 'w-10 h-10'}) }}
 		</button>
 		<div id="scroll-container-md" class="overflow-x-auto scrollbar-hide">
 			<div class="flex space-x-6">
@@ -118,11 +203,23 @@
                 ) %}
 				{% for manga in monstres %}
 					<div class="bg-black rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition flex-shrink-0 w-64">
-						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100">
-						<div class="p-4 text-center">
-							<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
-							<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+						<img src="{{ asset('medias/images/' ~ manga.image) }}" alt="{{ manga.title }}" class="w-full h-64 object-contain bg-gray-100 brightness-50">
+						<div class="p-4 flex items-center justify-between">
+							<div>
+								<h3 class="text-lg font-semibold mb-1">{{ manga.title|upper }}</h3>
+								<p class="text-gray-500 text-sm">{{ manga.type|capitalize }}</p>
+							</div>
+							{# Formulaire pour ajouter aux favoris #}
+							<form action="{{ path('favori_add', { mangaAnimeId: manga.id }) }}" method="post" class="mx-4 my-2">
+								<button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition btn-favori">
+									{{ ux_icon('bx:heart', { class: 'h-6 w-6' }) }}
+								</button>
+							</form>
 						</div>
+						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1 flex items-center gap-2 text-sm hover:text-violet-950">
+							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
+							Voir les détails
+						</a>
 					</div>
 				{% endfor %}
 			</div>
