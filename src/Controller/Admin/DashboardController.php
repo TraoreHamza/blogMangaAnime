@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Entity\Category;
 use App\Entity\MangaAnime;
 use App\Entity\Recommendation;
@@ -55,5 +56,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Categories', 'fas fa-tags', Category::class);
         yield MenuItem::linkToCrud('Recommendation', 'fas fa-users', Recommendation::class);
         yield MenuItem::linkToCrud('User', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Comment', 'fas fa-comments', Comment::class);
     }
 }
