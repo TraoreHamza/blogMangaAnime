@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Review;
 use App\Entity\MangaAnime;
 use App\Repository\MangaAnimeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,8 +25,19 @@ final class MangaAnimeController extends AbstractController
     public function index(): Response
     {
         $mangaAnimes = $this->mangaAnimeRepository->findAll();
+
+        $user = $this->getUser();
+        $favorisIds = [];
+
+        if ($user instanceof User) {
+            // Récupère les IDs des mangas favoris de l'utilisateur
+            foreach ($user->getFavoris() as $favori) {
+                $favorisIds[] = $favori->getMangaAnimes()->getId();
+            }
+        }
         return $this->render('manga_anime/index.html.twig', [
             'mangaAnimes' => $mangaAnimes,
+            'favorisIds' => $favorisIds,
         ]);
     }
 
@@ -37,9 +50,45 @@ final class MangaAnimeController extends AbstractController
             $this->addFlash('error', 'Manga/Anime not found.');
             return $this->redirectToRoute('mangaAnimes');
         }
+
+        $reviews = $mangaAnime->getReviews();
+        $count = count($reviews);
+        $sumRatings = 0;
+
+        foreach ($reviews as $review) {
+            $sumRatings += $review->getRating();
+        }
+
+        $averageRating = $count > 0 ? round($sumRatings / $count, 1) : 0;
+
         return $this->render('manga_anime/view.html.twig', [
             'mangaAnime' => $mangaAnime,
+            'reviews' => $reviews,
+            'averageRating' => $averageRating,
         ]);
+    }
+
+    #[Route('/manga/{id}/review/add', name: 'review_add', methods: ['POST'])]
+    public function addReview(Request $request, MangaAnime $mangaAnime, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        $rating = (int) $request->request->get('rating');
+
+
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour laisser un avis.');
+            return $this->redirectToRoute('mangaAnime_view', ['id' => $mangaAnime->getId()]);
+        }
+
+        $review = new Review();
+        $review->setUser($user);
+        $review->setRating($rating);
+
+        $this->em->persist($review);
+        $this->em->flush();
+
+        $this->addFlash('success', 'Merci pour votre avis !');
+        return $this->redirectToRoute('mangaAnime_view', ['id' => $mangaAnime->getId()]);
     }
 
     // filtrer les mangaAnimes
@@ -59,7 +108,7 @@ final class MangaAnimeController extends AbstractController
         // Passer TOUS les tableaux à Twig !
         return $this->render('manga_anime/index.html.twig', [
             'mangaAnimes' => $mangaAnimes,
-            'genres' => $genres, 
+            'genres' => $genres,
             'types' => $types,
         ]);
     }
