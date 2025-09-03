@@ -9,6 +9,7 @@ import "./styles/app.css";
 
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
 
+// Carrousel horizontal
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("scroll-container");
     const btnLeft = document.getElementById("scroll-left");
@@ -71,44 +72,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Notation
 document.addEventListener("DOMContentLoaded", () => {
-    const stars = document.querySelectorAll("#rating-stars svg");
-    const ratingInput = document.getElementById("rating-input");
-    let currentRating = 0;
+    if (!document.getElementById("rating-stars")) return;
 
-    const setStars = (rating) => {
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.add("text-yellow-400");
+    const stars = document.querySelectorAll("#rating-stars svg");
+    let selectedRating = 0;
+    const ratingInput = document.querySelector('input[name="rating"]');
+
+    function fillStars(rating) {
+        stars.forEach((star) => {
+            const starValue = parseInt(star.getAttribute("data-star"));
+            if (starValue <= rating) {
+                star.classList.add("text-orange-500");
                 star.classList.remove("text-gray-400");
             } else {
                 star.classList.add("text-gray-400");
-                star.classList.remove("text-yellow-400");
+                star.classList.remove("text-orange-500");
             }
         });
-    };
+    }
 
     stars.forEach((star) => {
         star.addEventListener("mouseenter", () => {
-            const hoverValue = parseInt(star.getAttribute("data-star"));
-            setStars(hoverValue);
+            fillStars(parseInt(star.getAttribute("data-star")));
         });
-
         star.addEventListener("mouseleave", () => {
-            setStars(currentRating);
+            fillStars(selectedRating);
         });
-
         star.addEventListener("click", () => {
-            currentRating = parseInt(star.getAttribute("data-star"));
-            ratingInput.value = currentRating;
-            setStars(currentRating);
+            selectedRating = parseInt(star.getAttribute("data-star"));
+            fillStars(selectedRating);
+            if (ratingInput) {
+                ratingInput.value = selectedRating;
+            }
         });
     });
 
-    // Si tu veux, initialise depuis la valeur existante dans ratingInput
-    if (ratingInput.value) {
-        currentRating = parseInt(ratingInput.value);
-        setStars(currentRating);
-    }
+    fillStars(selectedRating);
 });
 
 const input = document.querySelector('label input[data-model="query"]');
@@ -120,4 +119,49 @@ input.addEventListener("input", () => {
     } else {
         label.classList.remove("border-indigo-500", "shadow-indigo-300");
     }
+});
+
+// favoris
+document.querySelectorAll(".favori-form").forEach((form) => {
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Empêche le rechargement
+
+        const mangaId = this.dataset.mangaId;
+        const url = `/favori/add/${mangaId}`;
+        const button = this.querySelector(".btn-favori");
+
+        fetch(url, {
+            method: "POST",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    button.classList.add("active");
+                } else {
+                    alert(data.message || "Erreur lors de l'ajout aux favoris");
+                }
+            })
+            .catch(() => alert("Erreur réseau"));
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const filterToggle = document.getElementById("filter-toggle");
+    const filterDropdown = document.getElementById("filter-dropdown");
+
+    filterToggle.addEventListener("click", function (event) {
+        event.stopPropagation(); // Ajoute ceci !
+        filterDropdown.classList.toggle("hidden");
+    });
+
+    // Optionnel : fermer le menu si clic en dehors
+    document.addEventListener("click", function (event) {
+        if (
+            !filterToggle.contains(event.target) &&
+            !filterDropdown.contains(event.target)
+        ) {
+            filterDropdown.classList.add("hidden");
+        }
+    });
 });

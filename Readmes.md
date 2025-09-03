@@ -40,12 +40,34 @@ Mon intérêt pour ce projet est avant tout né de ma passion pour la culture ma
 |    6     | Administrateur       | Créer / supprimer un article via EasyAdmin                            | Gérer le contenu du blog de manière structurée                     |
 |    7     | Administrateur       | Gérer (activer/désactiver) et modérer les commentaires                | Maintenir un espace de discussion respectueux des CGU              |
 |    8     | Administrateur       | Gérer les utilisateurs (rôles, blocage)                               | Contrôler l’accès et la sécurité du site                           |
-|    9     | Administrateur       | Configurer les blocs dynamiques du front (header, footer, sidebar)    | Personnaliser la mise en page sans recoder                         |
+|    9     | Administrateur       | Créer / supprimer un mangas via EasyAdmin     | Gérer le contenu des mangas de manière structurée                          |
 |    10    | Administrateur       | Consulter des statistiques basiques (nombre d’articles, commentaires) | Suivre l’activité du site                                          |
 
+## Diagramme cas d'utilisateur 
+```mermaid
+usecaseDiagram
+    actor Utilisateur
+    actor Administrateur
+
+    Utilisateur --> (S'inscrire)
+    Utilisateur --> (Se connecter)
+    Utilisateur --> (Consulter la liste des mangas)
+    Utilisateur --> (Consulter une fiche manga)
+    Utilisateur --> (Ajouter un manga aux favoris)
+    Utilisateur --> (Commenter un manga)
+    Utilisateur --> (Modifier son profil)
+    
+    Administrateur --> (Se connecter)
+    Administrateur --> (Gérer les mangas)
+    Administrateur --> (Gérer les utilisateurs)
+    Administrateur --> (Modérer les commentaires)
+
+```
 ### Services
 
 ## 📘 Models (Database/Class Diagram)
+
+
 
 ```mermaid
 classDiagram
@@ -270,6 +292,22 @@ classDiagram
   }
 
 ```
+### Event Listener
+
+```mermaid
+classDiagram
+  class ArticleListener {
+    -onArticleCreated(Article article)
+    -onArticleUpdated(Article article)
+    -onArticleDeleted(Article article)
+  }
+
+  class UserListener {
+    -onUserLogin()
+    -onUserValidated()
+  }
+
+```
 
 ## Diagramme de sequence
 
@@ -292,21 +330,37 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant U as Utilisateur
-    participant AC as ArticleController
-    participant AS as ArticleService
-    participant EM as EntityManager
-    participant A as Article
-
-    U->>AC: create(title, content, image, ...)
-    AC->>AS: createArticle(data)
-    AS->>A: new Article(data)
-    AS->>EM: persist(A)
-    EM-->>AS: Article enregistré
-    AS-->>AC: Article créé
-    AC-->>U: Confirmation création
+    autonumber
+    User->>ArticleController: POST /articles/new
+    ArticleController->>ImageService: upload(image)
+    ImageService-->>ArticleController: imageUrl
+    ArticleController->>OptimizationService: applySeo(article)
+    ArticleController->>ArticleController: save(article)
+    ArticleController-->>User: Redirect to article created
 ```
+### edit an article
+```mermaid
+sequenceDiagram
+    autonumber
+    User->>ArticleController: POST /article/{slug}/edit
+    ArticleController->>ArticleController: findOneBySlug(slug)
+    ArticleController->>ImageService: upload(newImage)
+    ImageService-->>ArticleController: imageUrl
+    ArticleController->>ArticleController: persist(article)
+    ArticleController-->>User: Redirect to article edited
 
+```
+### Delete an article 
+```mermaid
+sequenceDiagram
+    autonumber
+    User->>ArticleController: POST /article/d/{slug}
+    ArticleController->>ArticleController: fetchArticle(slug)
+    ArticleController->>ImageService: delete(image)
+    ArticleController->>ArticleController: delete(article)
+    ArticleController-->>User: Redirect to article list
+
+```
 ### Post a comment
 
 ```mermaid
@@ -314,7 +368,6 @@ sequenceDiagram
     participant U as Utilisateur
     participant CC as CommentController
     participant MS as ModerationService
-    participant CS as CommentService
     participant EM as EntityManager
     participant C as Comment
 
@@ -322,32 +375,25 @@ sequenceDiagram
     CC->>MS: moderate(content)
     MS-->>CC: résultat (OK ou rejet)
     alt Commentaire approuvé
-        CC->>CS: createComment(user, article, content)
-        CS->>C: new Comment()
-        CS->>EM: persist(C)
-        EM-->>CS: Comment enregistré
-        CS-->>CC: Commentaire créé
+        CC->>C: new Comment()
+        CC->>EM: persist(C)
+        EM-->>CC: Comment enregistré
         CC-->>U: Confirmation publication
     else Commentaire rejeté
         CC-->>U: Message d’erreur/modération
     end
+
 ```
 
-### Moderation of comments
+### delete a commentaire
 
 ```mermaid
 sequenceDiagram
-    participant Admin as Modérateur
-    participant MC as ModerationService
-    participant EM as EntityManager
-    participant C as Comment
+    autonumber
+    User->>CommentController: POST /comment/{id}
+    CommentController->>CommentController: delete(comment)
+    CommentController-->>User: Redirect to article
 
-    Admin->>MC: moderate(commentId)
-    MC->>C: getComment(commentId)
-    MC->>C: setIsModerated(true)
-    MC->>EM: persist(C)
-    EM-->>MC: Commentaire modéré
-    MC-->>Admin: Résultat modération
 
 ```
 
