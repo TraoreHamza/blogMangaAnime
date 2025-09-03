@@ -27,6 +27,10 @@
 		.btn-favori.active {
 			color: #dc2626; /* Rouge vif */
 		}
+
+		.hidden {
+			display: none !important;
+		}
 	</style>
 
 	<div class="relative inline-block font-sans select-none filter-container">
@@ -36,7 +40,6 @@
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v5.172a1 1 0 01-2 0v-5.172a1 1 0 00-.293-.707L3.293 6.707A1 1 0 013 6V4z"/>
 			</svg>
 		</button>
-
 		<div id="filter-dropdown" class="absolute top-full right-0 mt-2 bg-gray-900 text-gray-200 shadow-lg rounded p-4 w-44 z-50 hidden filter-dropdown">
 			<fieldset class="border-none mb-4 p-0">
 				<legend class="font-bold mb-2">Langue</legend>
@@ -137,7 +140,7 @@
 							</form>
 						</div>
 						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1
-							flex items-center gap-2 text-sm hover:text-violet-950">
+															flex items-center gap-2 text-sm hover:text-violet-950">
 							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
 							Voir les détails
 						</a>

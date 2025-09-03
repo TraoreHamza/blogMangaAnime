@@ -18,7 +18,6 @@ class TestUploadController extends AbstractController
         $form->handleRequest($request);
 
         $fichierUpload = null;
-
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('imageFile')->getData();
 
@@ -27,7 +26,6 @@ class TestUploadController extends AbstractController
                 $this->addFlash('success', 'Fichier uploadé sous le nom : ' . $fichierUpload);
             }
         }
-
         return $this->render('test_upload/index.html.twig', [
             'form' => $form->createView(),
             'fichierUpload' => $fichierUpload,
