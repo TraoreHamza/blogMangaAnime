@@ -37,13 +37,11 @@ final class Search
             if (count($mangas) > 10) {
                 $mangas = array_slice($mangas, 0, 10);
             }
-
             return [
                 'articles' => $articles,
                 'mangas' => $mangas,
             ];
         }
-        
         return [
             'articles' => [],
             'mangas' => [],
