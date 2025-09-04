@@ -146,22 +146,18 @@ document.querySelectorAll(".favori-form").forEach((form) => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const filterToggle = document.getElementById("filter-toggle");
-    const filterDropdown = document.getElementById("filter-dropdown");
+document.addEventListener('DOMContentLoaded', () => {
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterDropdown = document.getElementById('filter-dropdown');
 
-    filterToggle.addEventListener("click", function (event) {
-        event.stopPropagation(); // Ajoute ceci !
-        filterDropdown.classList.toggle("hidden");
+    filterToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        filterDropdown.classList.toggle('hidden');
     });
 
-    // Optionnel : fermer le menu si clic en dehors
-    document.addEventListener("click", function (event) {
-        if (
-            !filterToggle.contains(event.target) &&
-            !filterDropdown.contains(event.target)
-        ) {
-            filterDropdown.classList.add("hidden");
-        }
+    document.addEventListener('click', () => {
+        filterDropdown.classList.add('hidden');
     });
+
+    filterDropdown.addEventListener('click', e => e.stopPropagation());
 });

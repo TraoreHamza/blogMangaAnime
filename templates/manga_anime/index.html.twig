@@ -32,7 +32,8 @@
 			display: none !important;
 		}
 	</style>
-
+	{{ dump(genres) }}
+	{{ dump(types) }}
 	<div class="relative inline-block font-sans select-none filter-container">
 		<button id="filter-toggle" aria-label="Filtrer" class="flex items-center gap-2 bg-transparent border-none font-bold text-sm cursor-pointer text-gray-800 filter-toggle">
 			<span>FILTRER</span>
@@ -41,40 +42,34 @@
 			</svg>
 		</button>
 		<div id="filter-dropdown" class="absolute top-full right-0 mt-2 bg-gray-900 text-gray-200 shadow-lg rounded p-4 w-44 z-50 hidden filter-dropdown">
-			<fieldset class="border-none mb-4 p-0">
-				<legend class="font-bold mb-2">Langue</legend>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="langue" value="tout" checked class="mr-2"/>
-					Tout
-				</label>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="langue" value="sous-titre" class="mr-2"/>
-					Sous-titrage
-				</label>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="langue" value="doublage" class="mr-2"/>
-					Doublage
-				</label>
-			</fieldset>
+			<form method="GET" action="">
+				<fieldset class="border-none mb-4 p-0">
+					<legend class="font-bold mb-2">Genre</legend>
+					<label class="block cursor-pointer mb-1 text-xs">
+						<select name="genre" class="mr-2 w-full">
+							<option value="">Tous genres</option>
+							{% for genre in genres %}
+								<option value="{{ genre }}" {{ genre == selectedGenre ? 'selected' : '' }}>{{ genre }}</option>
+							{% endfor %}
+						</select>
+					</label>
+				</fieldset>
 
-			<fieldset class="border-none p-0">
-				<legend class="font-bold mb-2">Médias</legend>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="media" value="tout" checked class="mr-2"/>
-					Tout
-				</label>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="media" value="serie" class="mr-2"/>
-					Série
-				</label>
-				<label class="block cursor-pointer mb-1 text-xs">
-					<input type="radio" name="media" value="film" class="mr-2"/>
-					Films
-				</label>
-			</fieldset>
+				<fieldset class="border-none p-0">
+					<legend class="font-bold mb-2">Type</legend>
+					<label class="block cursor-pointer mb-1 text-xs">
+						<select name="type" class="mr-2 w-full">
+							<option value="">Tous types</option>
+							{% for type in types %}
+								<option value="{{ type }}" {{ type == selectedType ? 'selected' : '' }}>{{ type }}</option>
+							{% endfor %}
+						</select>
+					</label>
+				</fieldset>
+				<button type="submit" class="btn btn-primary text-xs mt-2 w-full">Filtrer</button>
+			</form>
 		</div>
 	</div>
-
 	{# Afficher la liste des mangas/animes #}
 	{# Section des plus populaires #}
 	<div class="mb-8 relative">
@@ -140,7 +135,7 @@
 							</form>
 						</div>
 						<a href="{{ path('mangaAnime_view', { id: manga.id }) }}" class="row-span-1
-															flex items-center gap-2 text-sm hover:text-violet-950">
+																							flex items-center gap-2 text-sm hover:text-violet-950">
 							<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
 							Voir les détails
 						</a>
@@ -228,4 +223,22 @@
 			</div>
 		</div>
 	</div>
+	{# Le JS pour toggle le menu dropdown (ajoute ce script pour gérer l'ouverture/fermeture) #}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterDropdown = document.getElementById('filter-dropdown');
+
+    filterToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        filterDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        filterDropdown.classList.add('hidden');
+    });
+
+    filterDropdown.addEventListener('click', e => e.stopPropagation());
+});
+</script>
 {% endblock %}

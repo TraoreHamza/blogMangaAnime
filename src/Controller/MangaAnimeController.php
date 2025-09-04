@@ -91,25 +91,32 @@ final class MangaAnimeController extends AbstractController
         return $this->redirectToRoute('mangaAnime_view', ['id' => $mangaAnime->getId()]);
     }
 
-    // filtrer les mangaAnimes
     #[Route('/manga_anime', name: 'manga_anime_filter', methods: ['GET'])]
-    public function filter(): Response
+    public function filter(Request $request, MangaAnimeRepository $repo): Response
     {
-        $mangaAnimes = $this->mangaAnimeRepository->findAll();
+        $allItems = $repo->findAll();
 
-        // Extraire les genres uniques pour le select
-        $genres = array_unique(array_map(fn($m) => $m->getGenre(), $mangaAnimes));
+        $genres = array_unique(array_map(fn($m) => $m->getGenre(), $allItems));
         sort($genres);
 
-        // Extraire les types uniques pour le select
-        $types = array_unique(array_map(fn($m) => $m->getType(), $mangaAnimes));
+        $types = array_unique(array_map(fn($m) => $m->getType(), $allItems));
         sort($types);
 
-        // Passer TOUS les tableaux à Twig !
+        $selectedGenre = $request->query->get('genre');
+        $selectedType = $request->query->get('type');
+
+        if ($selectedGenre || $selectedType) {
+            $items = $repo->findByGenreAndType($selectedGenre, $selectedType);
+        } else {
+            $items = $allItems;
+        }
+
         return $this->render('manga_anime/index.html.twig', [
-            'mangaAnimes' => $mangaAnimes,
+            'mangaAnimes' => $items,
             'genres' => $genres,
             'types' => $types,
+            'selectedGenre' => $selectedGenre,
+            'selectedType' => $selectedType,
         ]);
     }
 }
